@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/images/favicon-32x32.png"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="./js/index.js" defer></script>
+
+    <title>Frontend Mentor | Frontend quiz app</title>
+  </head>
+  <body>
+    <main class="main main-light">
+      <div class="wrapper">
+        <section class="main_content">
+          <div class="theme-toggle">
+              <img src="/frontend/assets/images/icon-sun-light.svg" alt=""> 
+              <svg width="32" height="20" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="32" height="20" rx="10" fill="#A729F5"/>
+              <circle cx="22" cy="10" r="6" fill="white"/>
+              </svg>
+              <img src="/frontend/assets/images/icon-moon-light.svg" alt="">
+          </div>
+          <h1 class="main__heading">
+            Welcome to the <br />
+            <span class="bold">Frontend Quiz!</span>
+          </h1>
+          <p>Pick a subject to get started.</p>
+          <div role="group" class="buttons" aria-label="Quiz Categories">
+            <ul>
+              <li class="button__group">
+                  <div class="img-wrapper orange"><img src="/frontend/assets/images/icon-html.svg" alt=""></div>
+                  <span>HTML</span>
+              </li>
+              <li class="button__group">
+                  <div class="img-wrapper green"><img src="/frontend/assets/images/icon-css.svg" alt=""></div>
+                  <span>CSS</span>
+              </li>
+              <li class="button__group">
+                  <div class="img-wrapper blue"><img src="/frontend/assets/images/icon-js.svg" alt=""></div>
+                  <span>Javascript</span>
+              </li>
+              <li class="button__group">
+                  <div class="img-wrapper purple"><img src="/frontend/assets/images/icon-accessibility.svg" alt=""></div>
+                  <span>Accessibility</span>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </main>
+      <div class="main__overlay-mobile main__overlay-light">
+        <img
+          src="/frontend/assets/images/pattern-background-mobile-dark.svg"
+          alt=""
+        />
+      </div>
+      <div class="main__overlay-tablet main__overlay-light">
+        <img
+          src="/frontend/assets/images/pattern-background-tablet-dark.svg"
+          alt=""
+        />
+      </div>
+      <div class="main__overlay-desktop main__overlay-light">
+        <img
+          src="/frontend/assets/images/pattern-background-desktop-dark.svg"
+          alt=""
+        />
+      </div>
+    </div>
+  </body>
+</html>
