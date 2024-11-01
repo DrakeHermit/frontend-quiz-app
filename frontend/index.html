@@ -18,8 +18,7 @@
   <body>
     <main class="main main-light">
       <div class="wrapper">
-        <section class="main_content">
-          <div class="theme-toggle">
+        <div class="theme-toggle">
               <img src="/frontend/assets/images/icon-sun-light.svg" alt=""> 
               <svg width="32" height="20" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect width="32" height="20" rx="10" fill="#A729F5"/>
@@ -27,32 +26,38 @@
               </svg>
               <img src="/frontend/assets/images/icon-moon-light.svg" alt="">
           </div>
-          <h1 class="main__heading">
-            Welcome to the <br />
-            <span class="bold">Frontend Quiz!</span>
-          </h1>
-          <p>Pick a subject to get started.</p>
-          <div role="group" class="buttons" aria-label="Quiz Categories">
-            <ul>
-              <li class="button__group">
+        <section class="main__content">
+          <div class="main__left">
+            <h1 class="main__heading">
+              Welcome to the <br />
+              <span class="bold">Frontend Quiz!</span>
+            </h1>
+            <p>Pick a subject to get started.</p>
+          </div>
+          <div class="main__right">
+            <div role="group" class="buttons" aria-label="Quiz Categories">
+              <ul>
+                <li class="button__group">
                   <div class="img-wrapper orange"><img src="/frontend/assets/images/icon-html.svg" alt=""></div>
                   <span>HTML</span>
-              </li>
-              <li class="button__group">
+                </li>
+                <li class="button__group">
                   <div class="img-wrapper green"><img src="/frontend/assets/images/icon-css.svg" alt=""></div>
                   <span>CSS</span>
-              </li>
-              <li class="button__group">
+                </li>
+                <li class="button__group">
                   <div class="img-wrapper blue"><img src="/frontend/assets/images/icon-js.svg" alt=""></div>
                   <span>Javascript</span>
-              </li>
-              <li class="button__group">
+                </li>
+                <li class="button__group">
                   <div class="img-wrapper purple"><img src="/frontend/assets/images/icon-accessibility.svg" alt=""></div>
                   <span>Accessibility</span>
-              </li>
-            </ul>
-          </div>
+                </li>
+              </ul>
+            </div>
+            </div>
         </section>
+      </div>
       </main>
       <div class="main__overlay-mobile main__overlay-light">
         <img

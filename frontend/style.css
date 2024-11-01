@@ -152,10 +152,44 @@ img {
 }
 
 /* Desktop */
-@media (min-width: 1024px) {
+@media (min-width: 1080px) {
   /* Overlay */
   .main__overlay-tablet, .main__overlay-mobile {
     display: none;
+  }
+
+ .main__content {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    padding: 0 10rem;
+}
+
+.main__right {
+    width: 564px; /* Fixed width */
+}
+
+  .wrapper .main__heading {
+    font-size: 4rem;
+    font-weight: 100;
+
+    .bold {
+      font-weight: 500;
+    }
+}
+
+.button__group {
+  padding: 20px;
+  gap: 32px;
+}
+
+  .wrapper p {
+    font-size: 1rem;
+    margin-top: 2rem;
+  }
+
+  .theme-toggle {
+    margin-block: 6rem;
   }
 
   .main__overlay-desktop {
@@ -163,6 +197,7 @@ img {
     position: fixed;
     top: 0;
     left: 0;
+    right: 0;
     z-index: -1;
   }
 }
