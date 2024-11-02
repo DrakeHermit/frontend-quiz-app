@@ -15,16 +15,18 @@
 
     <title>Frontend Mentor | Frontend quiz app</title>
   </head>
-  <body>
-    <main class="main main-light">
+  <body class="">
+    <main class="main">
       <div class="wrapper">
         <div class="theme-toggle">
-              <img src="/frontend/assets/images/icon-sun-light.svg" alt=""> 
-              <svg width="32" height="20" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="32" height="20" rx="10" fill="#A729F5"/>
-              <circle cx="22" cy="10" r="6" fill="white"/>
+              <img src="/frontend/assets/images/icon-sun-light.svg" alt="" id="sun"> 
+                <button class="toggler">
+                  <svg width="32" height="20" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="32" height="20" rx="10" fill="#A729F5"/>
+                  <circle cx="22" cy="10" r="6" fill="white" class="movable"/>
+                </button>
               </svg>
-              <img src="/frontend/assets/images/icon-moon-light.svg" alt="">
+              <img src="/frontend/assets/images/icon-moon-light.svg" alt="" id="moon">
           </div>
         <section class="main__content">
           <div class="main__left">
@@ -59,22 +61,23 @@
         </section>
       </div>
       </main>
-      <div class="main__overlay-mobile main__overlay-light">
+      <div class="main__overlay-mobile"">
         <img
           src="/frontend/assets/images/pattern-background-mobile-dark.svg"
           alt=""
-        />
+          id="mobileOverlay" />
       </div>
-      <div class="main__overlay-tablet main__overlay-light">
+      <div class="main__overlay-tablet">
         <img
           src="/frontend/assets/images/pattern-background-tablet-dark.svg"
           alt=""
+          id="tabletOverlay"
         />
       </div>
-      <div class="main__overlay-desktop main__overlay-light">
+      <div class="main__overlay-desktop">
         <img
           src="/frontend/assets/images/pattern-background-desktop-dark.svg"
-          alt=""
+          alt="" id="desktopOverlay"
         />
       </div>
     </div>

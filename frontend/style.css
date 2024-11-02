@@ -5,7 +5,7 @@
 
 :root {
   --background-color-dark: #313E51;
-  --background-color-light: #EBF0FF;
+  --background-color-light: #F4F6FA;
   --clr-dark: #fff;
   --clr-light: #3B4D66;
   --light-blue: #ABC1E1;
@@ -13,6 +13,8 @@
   --css-green: #E0FDEF;
   --js-blue: #EBF0FF;
   --accessibility-purple: #F6E7FF;
+  --gray-navy: #626C7F;
+  --drop-shadow: #edf1f9;
 }
 
 * {
@@ -40,6 +42,52 @@ img {
   margin-top: 2.5rem;
 }
 
+.toggler {
+  background-color: inherit;
+  border: none;
+  outline: none;
+  transform: translateY(2px);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+/* Animate the toggling of themes */
+.toggler .movable.toggle {
+  transform: translateX(-12px);
+}
+
+.movable {
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out;
+}
+/* ------------------------------ */
+
+/* Light mode classes */
+.main-light {
+  background-color: var(--background-color-light);
+  transition: all 0.1s;
+}
+
+body.main-light .main__heading {
+  color: var(--background-color-dark);
+  transition: all 0.1s;
+}
+
+body.main-light p {
+  color: var(--gray-navy);
+  transition: all 0.1s;
+}
+
+body.main-light .button__group {
+  background-color: var(--clr-dark);
+  filter: drop-shadow(1px 2px 5px var(--drop-shadow));
+  transition: all 0.1s;
+
+  span {
+    color: var(--background-color-dark);
+  }
+}
+/* ------------------- */
 .wrapper .main__heading {
   color: var(--clr-dark);
   font-size: 2.5rem;
@@ -121,6 +169,14 @@ img {
   background-color: var(--accessibility-purple);
 }
 
+.main__overlay-mobile img,
+.main__overlay-tablet img,
+.main__overlay-desktop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* Overlay */
 /* Mobile */
 .main__overlay-tablet, .main__overlay-desktop {
@@ -128,10 +184,11 @@ img {
 }
 
 .main__overlay-mobile {
-  display: block;
   position: fixed;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100vh;
   z-index: -1;
 }
 
@@ -148,6 +205,25 @@ img {
     top: 0;
     left: 0;
     z-index: -1;
+  }
+
+    .wrapper .main__heading {
+    font-size: 3rem;
+    font-weight: 100;
+
+    .bold {
+      font-weight: 500;
+    }
+  }
+
+  .wrapper p {
+    font-size: 18px;
+    margin-top: 2rem;
+  }
+
+  .button__group {
+    padding: 12px;
+    gap: 32px;
   }
 }
 
@@ -190,6 +266,7 @@ img {
 
   .theme-toggle {
     margin-block: 6rem;
+    gap: 16px;
   }
 
   .main__overlay-desktop {
@@ -197,7 +274,8 @@ img {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
+    width: 100%;
+    height: 100vh;
     z-index: -1;
   }
 }
