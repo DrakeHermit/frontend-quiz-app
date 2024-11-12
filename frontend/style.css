@@ -65,24 +65,20 @@ img {
 /* Light mode classes */
 .main-light {
   background-color: var(--background-color-light);
-  transition: all 0.1s;
 }
 
 body.main-light .main__heading {
   color: var(--background-color-dark);
-  transition: all 0.1s;
 }
 
 body.main-light p {
   color: var(--gray-navy);
-  transition: all 0.1s;
 }
 
 body.main-light .button__group {
   background-color: var(--clr-dark);
   filter: drop-shadow(1px 2px 5px var(--drop-shadow));
-  transition: all 0.1s;
-
+  
   span {
     color: var(--background-color-dark);
   }
@@ -169,6 +165,8 @@ body.main-light .button__group {
   background-color: var(--accessibility-purple);
 }
 
+/* ------- */
+
 .main__overlay-mobile img,
 .main__overlay-tablet img,
 .main__overlay-desktop img {
@@ -238,11 +236,12 @@ body.main-light .button__group {
     display: flex;
     justify-content: space-around;
     width: 100%;
+    gap: 10rem;
     padding: 0 10rem;
 }
 
 .main__right {
-    width: 564px; /* Fixed width */
+    width: 564px; 
 }
 
   .wrapper .main__heading {
@@ -265,7 +264,7 @@ body.main-light .button__group {
   }
 
   .theme-toggle {
-    margin-block: 6rem;
+    margin: 6rem 6rem 6rem 0;
     gap: 16px;
   }
 
