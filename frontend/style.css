@@ -142,13 +142,13 @@ body.main-light .button__group {
   }
 
   .img-wrapper {
-    width: 40px;
-    height: 40px;
-    background-color: #fff;
+    width: 56px;
+    height: 56px;
+    background-color: var(--background-color-light);
     display: flex;
-    justify-content: center;
+    justify-content: center; 
     align-items: center;
-    border-radius: 3px;
+    border-radius: 12px;
 
     img {
       width: 28px;
@@ -172,6 +172,12 @@ body.main-light .button__group {
 
 .button__group .purple {
   background-color: var(--accessibility-purple);
+}
+
+.bold-big {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--background-color-dark)
 }
 
 /* ------- */
@@ -217,6 +223,7 @@ body.main-light .button__group {
     .wrapper .main__heading {
     font-size: 3rem;
     font-weight: 100;
+    margin-top: 4rem;
 
     .bold {
       font-weight: 500;
@@ -231,6 +238,17 @@ body.main-light .button__group {
   .button__group {
     padding: 12px;
     gap: 32px;
+  }
+
+  .img-wrapper {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
   }
 }
 
@@ -284,5 +302,16 @@ body.main-light .button__group {
     width: 100%;
     height: 100vh;
     z-index: -1;
+  }
+  
+  .img-wrapper {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
   }
 }
