@@ -3,7 +3,7 @@ import { QuizService } from "./quiz-service.js";
 export class Quiz {
   constructor() {
     this.service = new QuizService();
-    this.currentQuestion = 0;
+    this.currentQuestionIndex = 0;
     this.questions = [];
     this.init();
   }
@@ -18,6 +18,25 @@ export class Quiz {
       .forEach((button) =>
         button.addEventListener("click", (e) => this.handleCategoryClick(e))
       );
+  }
+
+  addOnAnswerListeners() {
+    document
+      .querySelectorAll(".button__group")
+      .forEach((button) =>
+        button.addEventListener("click", (e) => this.handleAnswer(e))
+      );
+  }
+
+  removeEventListeners() {
+    document
+      .querySelectorAll("[data-category]")
+      .forEach((button) => button.replaceWith(button.cloneNode(true)));
+  }
+
+  handleAnswer(e) {
+    this.currentQuestionIndex++;
+    this.displayQuestion();
   }
 
   async handleCategoryClick(e) {

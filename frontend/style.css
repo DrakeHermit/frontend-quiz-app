@@ -280,7 +280,8 @@ body.main-light .button__group {
 }
 
 .button__group {
-  padding: 20px;
+  padding: 15px;
+  width: 600px;
   gap: 32px;
 }
 
