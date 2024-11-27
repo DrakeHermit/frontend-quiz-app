@@ -21,11 +21,11 @@ export class Quiz {
   }
 
   addOnAnswerListeners() {
-    document
-      .querySelectorAll(".button__group")
-      .forEach((button) =>
-        button.addEventListener("click", (e) => this.handleAnswer(e))
-      );
+    document.querySelectorAll(".button__group").forEach((button) =>
+      button.addEventListener("click", (e) => this.handleAnswer(e), {
+        once: true,
+      })
+    );
   }
 
   removeEventListeners() {
@@ -42,32 +42,47 @@ export class Quiz {
   async handleCategoryClick(e) {
     const category = e.currentTarget.dataset.category;
     this.questions = await this.service.fetchQuestions(category);
-    this.displayRandomQuestion();
+    this.removeEventListeners();
+    this.displayQuestion();
   }
 
-  displayRandomQuestion() {
-    const randomIndex = Math.floor(Math.random() * this.questions.length);
-    const question = this.questions[randomIndex];
+  displayQuestion() {
+    if (this.currentQuestionIndex <= this.questions.length - 1) {
+      const letters = ["A", "B", "C", "D"];
+      const question = this.questions[this.currentQuestionIndex];
 
-    // Selectors
-    const title = document.querySelector(".main__heading");
-    title.textContent = question.question;
-    title.style.fontSize = "36px";
-    const progress = document.getElementById("remove");
-    progress.innerHTML = "";
-    const answerText = document.querySelectorAll(".button__group span");
-    answerText.forEach((answer, index) => {
-      answer.textContent = question.options[index];
-    });
-    const answerChoice = document.querySelectorAll(".img-wrapper");
-    const letters = ["A", "B", "C", "D"];
-    answerChoice.forEach(
-      (choice, index) =>
-        (choice.innerHTML = `
-        <div class="img-wrapper bold-big">
-          ${letters[index]}
-        </div> 
-      `)
-    );
+      console.log("Current question data:", question);
+
+      if (!question || !question.options) {
+        console.error("Invalid question data:", question);
+        return;
+      }
+      // Selectors
+      const title = document.querySelector(".main__heading");
+      title.textContent = question.question;
+      title.style.fontSize = "36px";
+      const progress = document.getElementById("remove");
+      progress.innerHTML = "";
+      const answerContainer = document.querySelector(".buttons ul");
+
+      answerContainer.innerHTML = "";
+
+      question.options.forEach((option, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <button class="button__group" data-answer="${index}">
+                <div class="img-wrapper bold-big">
+                    ${letters[index]}
+                </div>
+                <span>${option}</span>
+            </button>
+        `;
+        answerContainer.appendChild(li);
+      });
+
+      this.addOnAnswerListeners();
+    } else {
+      console.log("Quiz completed!");
+    }
   }
 }
