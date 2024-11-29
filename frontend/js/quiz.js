@@ -51,35 +51,37 @@ export class Quiz {
       const letters = ["A", "B", "C", "D"];
       const question = this.questions[this.currentQuestionIndex];
 
-      console.log("Current question data:", question);
-
-      if (!question || !question.options) {
-        console.error("Invalid question data:", question);
-        return;
-      }
       // Selectors
       const title = document.querySelector(".main__heading");
       title.textContent = question.question;
       title.style.fontSize = "36px";
       const progress = document.getElementById("remove");
       progress.innerHTML = "";
-      const answerContainer = document.querySelector(".buttons ul");
 
-      answerContainer.innerHTML = "";
+      const buttonsContainer = document.querySelector(".buttons");
 
-      question.options.forEach((option, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-            <button class="button__group" data-answer="${index}">
-                <div class="img-wrapper bold-big">
-                    ${letters[index]}
-                </div>
-                <span>${option}</span>
-            </button>
-        `;
-        answerContainer.appendChild(li);
-      });
+      const html = `
+        <ul>
+            ${question.options
+              .map(
+                (option, index) => `
+                <li>
+                    <button class="button__group" data-answer="${index}">
+                        <div class="img-wrapper bold-big">
+                            ${letters[index]}
+                        </div>
+                        <span>${option
+                          .replace(/</g, "&lt;")
+                          .replace(/>/g, "&gt;")}</span>
+                    </button>
+                </li>
+            `
+              )
+              .join("")}
+        </ul>
+    `;
 
+      buttonsContainer.innerHTML = html;
       this.addOnAnswerListeners();
     } else {
       console.log("Quiz completed!");
