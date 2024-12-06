@@ -5,6 +5,7 @@ const body = document.body;
 const sunIcon = document.getElementById("sun");
 const moonIcon = document.getElementById("moon");
 const movableCirc = document.querySelector(".movable");
+const toggleBtn = document.querySelector(".toggler");
 
 export default function themeSwitcher() {
   document.querySelector(".toggler").addEventListener("click", () => {
