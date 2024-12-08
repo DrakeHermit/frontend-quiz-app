@@ -1,4 +1,6 @@
 import { QuizService } from "./quiz-service.js";
+import CustomButton from "./components/CustomButton.js";
+import ProgressBar from "./components/ProgressBar.js";
 
 export class Quiz {
   constructor() {
@@ -51,7 +53,6 @@ export class Quiz {
       const letters = ["A", "B", "C", "D"];
       const question = this.questions[this.currentQuestionIndex];
 
-      // Selectors
       const title = document.querySelector(".main__heading");
       title.textContent = question.question;
       title.style.fontSize = "36px";
@@ -59,6 +60,7 @@ export class Quiz {
       progress.innerHTML = "";
 
       const buttonsContainer = document.querySelector(".buttons");
+      const questionInfoContainer = document.querySelector(".main__left");
 
       const html = `
         <ul>
@@ -82,9 +84,21 @@ export class Quiz {
     `;
 
       buttonsContainer.innerHTML = html;
+      this.addSubmitButton(buttonsContainer);
+      this.addProgressBar(questionInfoContainer);
       this.addOnAnswerListeners();
     } else {
       console.log("Quiz completed!");
     }
+  }
+
+  addSubmitButton(container) {
+    const button = document.createElement("custom-button");
+    container.appendChild(button);
+  }
+
+  addProgressBar(container) {
+    const progressBar = document.createElement("progress-bar");
+    container.appendChild(progressBar);
   }
 }
