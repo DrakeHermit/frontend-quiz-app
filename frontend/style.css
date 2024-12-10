@@ -120,7 +120,7 @@ body.main-light .button__group {
 .theme-toggle {
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: space-between;
   gap: 8px;
   margin-block: 26px;
 
@@ -128,6 +128,19 @@ body.main-light .button__group {
     width: 20px;
     height: 20px;
   }
+
+  .description {
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+    margin-left: 8rem;
+  }
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .button__group {

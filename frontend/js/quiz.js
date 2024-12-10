@@ -86,6 +86,7 @@ export class Quiz {
       buttonsContainer.innerHTML = html;
       this.addSubmitButton(buttonsContainer);
       this.addProgressBar(questionInfoContainer);
+      console.log(this.questions);
       this.addOnAnswerListeners();
     } else {
       console.log("Quiz completed!");
@@ -100,5 +101,16 @@ export class Quiz {
   addProgressBar(container) {
     const progressBar = document.createElement("progress-bar");
     container.appendChild(progressBar);
+  }
+
+  addCategoryDescription(data) {
+    const categoryContainer = document.querySelector(".theme-toggle");
+    const categoryDescriptionDiv = document.createElement("div");
+    categoryDescriptionDiv.innerHTML = `
+      <img src=${data.icon} alt="Category picture" />
+      <h2>${data.title}</h2>
+    `;
+
+    categoryContainer.appendChild(categoryDescriptionDiv);
   }
 }
