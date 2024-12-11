@@ -15,6 +15,7 @@
   --accessibility-purple: #F6E7FF;
   --gray-navy: #626C7F;
   --drop-shadow: #edf1f9;
+  --purple-color: #A729F5;
 }
 
 * {
@@ -200,6 +201,15 @@ body.main-light .button__group {
   color: var(--background-color-dark)
 }
 
+.isSelected {
+  border: 2px solid var(--purple-color);
+
+  .img-wrapper {
+    background-color: var(--purple-color);
+    color: var(--clr-dark);
+  }
+}
+
 /* ------- */
 
 .main__overlay-mobile img,
@@ -226,7 +236,7 @@ body.main-light .button__group {
 }
 
 /* Tablet */
-@media (min-width: 640px) {
+@media (max-width: 640px) {
   /* Overlay */
   .main__overlay-desktop, .main__overlay-mobile {
     display: none;
@@ -282,12 +292,6 @@ body.main-light .button__group {
  .main__content {
     display: flex;
     justify-content: space-around;
-    gap: 10rem;
-    padding: 0 10rem;
-}
-
-.main__right {
-    width: 564px; 
 }
 
   .wrapper .main__heading {

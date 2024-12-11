@@ -8,7 +8,7 @@ class CustomButton extends HTMLElement {
     this.shadowRoot.innerHTML = `
       <style>
         button {
-          width: 600px;
+          width: 100%;
           padding: 25px;
           border-radius: 12px;
           background-color: #A729F5;

@@ -22,18 +22,21 @@ export class Quiz {
       );
   }
 
-  addOnAnswerListeners() {
-    document.querySelectorAll(".button__group").forEach((button) =>
-      button.addEventListener("click", (e) => this.handleAnswer(e), {
-        once: true,
-      })
-    );
-  }
-
   removeEventListeners() {
     document
       .querySelectorAll("[data-category]")
       .forEach((button) => button.replaceWith(button.cloneNode(true)));
+  }
+
+  btnSelected() {
+    const checkedBtn = document.querySelectorAll(".button__group");
+
+    checkedBtn.forEach((button) => {
+      button.addEventListener("click", () => {
+        checkedBtn.forEach((btn) => btn.classList.remove("isSelected"));
+        button.classList.add("isSelected");
+      });
+    });
   }
 
   handleAnswer(e) {
@@ -86,8 +89,8 @@ export class Quiz {
       buttonsContainer.innerHTML = html;
       this.addSubmitButton(buttonsContainer);
       this.addProgressBar(questionInfoContainer);
-      console.log(this.questions);
-      this.addOnAnswerListeners();
+      this.btnSelected();
+      // this.addCategoryDescription(question);
     } else {
       console.log("Quiz completed!");
     }
@@ -104,13 +107,13 @@ export class Quiz {
   }
 
   addCategoryDescription(data) {
-    const categoryContainer = document.querySelector(".theme-toggle");
+    const categoryContainer = document.querySelector(".description");
     const categoryDescriptionDiv = document.createElement("div");
     categoryDescriptionDiv.innerHTML = `
       <img src=${data.icon} alt="Category picture" />
-      <h2>${data.title}</h2>
+      <h2>${data.question}</h2>
     `;
 
-    categoryContainer.appendChild(categoryDescriptionDiv);
+    categoryContainer.innerHTML = categoryDescriptionDiv;
   }
 }
