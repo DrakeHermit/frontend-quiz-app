@@ -39,7 +39,7 @@ export class Quiz {
     });
   }
 
-  handleAnswer(e) {
+  handleAnswer() {
     this.currentQuestionIndex++;
     this.displayQuestion();
   }
@@ -87,8 +87,9 @@ export class Quiz {
     `;
 
       buttonsContainer.innerHTML = html;
-      this.addSubmitButton(buttonsContainer);
-      this.addProgressBar(questionInfoContainer);
+      const submitBtn = this.addSubmitButton(buttonsContainer);
+      buttonsContainer.appendChild(submitBtn);
+      // this.addProgressBar(questionInfoContainer);
       this.btnSelected();
       // this.addCategoryDescription(question);
     } else {
@@ -96,9 +97,10 @@ export class Quiz {
     }
   }
 
-  addSubmitButton(container) {
+  addSubmitButton() {
     const button = document.createElement("custom-button");
-    container.appendChild(button);
+    button.handleClick = this.handleAnswer.bind(this);
+    return button;
   }
 
   addProgressBar(container) {

@@ -29,9 +29,13 @@ class CustomButton extends HTMLElement {
       <button>Submit Answer</button>
     `;
 
-    this.shadowRoot
-      .querySelector("button")
-      .addEventListener("click", () => console.log("It works"));
+    this.shadowRoot.querySelector("button").addEventListener("click", () => {
+      if (this.handleClick) {
+        this.handleClick();
+      } else {
+        console.log("It didnt work");
+      }
+    });
   }
 }
 
