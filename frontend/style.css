@@ -129,13 +129,6 @@ body.main-light .button__group {
     width: 20px;
     height: 20px;
   }
-
-  .description {
-    color: #fff;
-    font-size: 28px;
-    font-weight: 700;
-    margin-left: 8rem;
-  }
 }
 
 .toggle-container {
@@ -161,8 +154,9 @@ body.main-light .button__group {
     font-size: 18px;
     font-weight: 500;
   }
+}
 
-  .img-wrapper {
+.img-wrapper {
     width: 56px;
     height: 56px;
     background-color: var(--background-color-light);
@@ -176,22 +170,35 @@ body.main-light .button__group {
       height: 28px;
     }
   }
-}
+
+  .description {
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+    opacity: 0;
+    visibility: 0;
+  }
+
+  .category-description {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
 
 /* Utility */
-.button__group .orange {
+.orange {
   background-color: var(--html-orange);
 }
 
-.button__group .green {
+.green {
   background-color: var(--css-green);
 }
 
-.button__group .blue {
+.blue {
   background-color: var(--js-blue);
 }
 
-.button__group .purple {
+.purple {
   background-color: var(--accessibility-purple);
 }
 
@@ -262,7 +269,6 @@ body.main-light .button__group {
 
   .wrapper p {
     font-size: 18px;
-    margin-top: 2rem;
   }
 
   .button__group {
@@ -301,6 +307,10 @@ body.main-light .button__group {
     .bold {
       font-weight: 500;
     }
+}
+
+.main__left {
+  max-width: 600px;
 }
 
 .button__group {

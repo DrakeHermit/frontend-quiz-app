@@ -46,8 +46,10 @@ export class Quiz {
 
   async handleCategoryClick(e) {
     const category = e.currentTarget.dataset.category;
+    console.log(category);
     this.questions = await this.service.fetchQuestions(category);
     this.removeEventListeners();
+    this.addCategoryDescription(category);
     this.displayQuestion();
   }
 
@@ -59,8 +61,6 @@ export class Quiz {
       const title = document.querySelector(".main__heading");
       title.textContent = question.question;
       title.style.fontSize = "36px";
-      const progress = document.getElementById("remove");
-      progress.innerHTML = "";
 
       const buttonsContainer = document.querySelector(".buttons");
       const questionInfoContainer = document.querySelector(".main__left");
@@ -89,9 +89,13 @@ export class Quiz {
       buttonsContainer.innerHTML = html;
       const submitBtn = this.addSubmitButton(buttonsContainer);
       buttonsContainer.appendChild(submitBtn);
-      // this.addProgressBar(questionInfoContainer);
+      this.addProgressBar(questionInfoContainer);
       this.btnSelected();
-      // this.addCategoryDescription(question);
+      questionInfoContainer.querySelector("p")?.remove();
+      this.addNumericalProgress(
+        questionInfoContainer,
+        this.currentQuestionIndex
+      );
     } else {
       console.log("Quiz completed!");
     }
@@ -108,14 +112,37 @@ export class Quiz {
     container.appendChild(progressBar);
   }
 
-  addCategoryDescription(data) {
-    const categoryContainer = document.querySelector(".description");
-    const categoryDescriptionDiv = document.createElement("div");
-    categoryDescriptionDiv.innerHTML = `
-      <img src=${data.icon} alt="Category picture" />
-      <h2>${data.question}</h2>
-    `;
+  addCategoryDescription(category) {
+    const categoryStyles = {
+      html: "orange",
+      css: "green",
+      javascript: "blue",
+      accessibility: "purple",
+    };
 
-    categoryContainer.innerHTML = categoryDescriptionDiv;
+    const categoryObj = {
+      title: category.toUpperCase(),
+      pictureSrc: `/frontend/assets/images/icon-${category}.svg`,
+      bgColor: categoryStyles[category],
+    };
+
+    const categoryContainer = document.querySelector(".description");
+    categoryContainer.innerHTML = `
+     <div class="category-description">
+       <div class="img-wrapper ${categoryObj.bgColor}"><img src=${categoryObj.pictureSrc} alt="Category picture" /></div>
+        <h2>${categoryObj.title}</h2>
+     </div>
+    `;
+    categoryContainer.style.opacity = "1";
+    categoryContainer.style.visibility = "1";
+  }
+
+  addNumericalProgress(element, questionNumber) {
+    element.insertAdjacentHTML(
+      "afterbegin",
+      `
+        <p>Question ${questionNumber + 1} of 10</p>
+      `
+    );
   }
 }
