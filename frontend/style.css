@@ -66,6 +66,12 @@ img {
   height: 22px;
 }
 
+.validate {
+  margin-left: auto;
+  visibility: 0;
+  opacity: 0;
+}
+
 /* Animate the toggling of themes */
 .toggler .movable.toggle {
   transform: translateX(-12px);
@@ -311,6 +317,10 @@ body.main-light .button__group {
 
 .main__left {
   max-width: 600px;
+}
+
+.category-description {
+  margin-left: 6rem;
 }
 
 .button__group {

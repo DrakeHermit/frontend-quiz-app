@@ -46,7 +46,6 @@ export class Quiz {
 
   async handleCategoryClick(e) {
     const category = e.currentTarget.dataset.category;
-    console.log(category);
     this.questions = await this.service.fetchQuestions(category);
     this.removeEventListeners();
     this.addCategoryDescription(category);
