@@ -7,6 +7,7 @@ export class Quiz {
     this.service = new QuizService();
     this.currentQuestionIndex = 0;
     this.questions = [];
+    this.progressBar = null;
     this.init();
   }
 
@@ -62,7 +63,6 @@ export class Quiz {
       title.style.fontSize = "36px";
 
       const buttonsContainer = document.querySelector(".buttons");
-      const questionInfoContainer = document.querySelector(".main__left");
 
       const html = `
         <ul>
@@ -88,8 +88,11 @@ export class Quiz {
       buttonsContainer.innerHTML = html;
       const submitBtn = this.addSubmitButton(buttonsContainer);
       buttonsContainer.appendChild(submitBtn);
-      this.addProgressBar(questionInfoContainer);
       this.btnSelected();
+      const questionInfoContainer = document.querySelector(".main__left");
+      this.initializeProgressBar(questionInfoContainer);
+      this.updateProgress();
+      questionInfoContainer.querySelector(".progress-display")?.remove();
       questionInfoContainer.querySelector("p")?.remove();
       this.addNumericalProgress(
         questionInfoContainer,
@@ -106,9 +109,20 @@ export class Quiz {
     return button;
   }
 
-  addProgressBar(container) {
-    const progressBar = document.createElement("progress-bar");
-    container.appendChild(progressBar);
+  initializeProgressBar(container) {
+    if (!this.progressBar) {
+      this.progressBar = document.createElement("progress-bar");
+      container.appendChild(this.progressBar);
+    }
+  }
+
+  updateProgress() {
+    if (this.progressBar) {
+      this.progressBar.updateProgress(
+        this.currentQuestionIndex + 1,
+        this.questions.length
+      );
+    }
   }
 
   addCategoryDescription(category) {
@@ -140,7 +154,7 @@ export class Quiz {
     element.insertAdjacentHTML(
       "afterbegin",
       `
-        <p>Question ${questionNumber + 1} of 10</p>
+        <div class="progress-display">Question ${questionNumber + 1} of 10</div>
       `
     );
   }
