@@ -25,9 +25,7 @@
 }
 
 body {
-  min-height: 100vh;
   background-color: var(--background-color-dark);
-  overflow: hidden;
   font-family: Rubik, sans-serif;
 }
 
@@ -272,6 +270,10 @@ body.main-light .progress-display {
     display: none;
   }
 
+  body {
+    overflow: auto;
+  }
+
   .main__overlay-tablet {
     display: block;
     position: fixed;
@@ -283,7 +285,7 @@ body.main-light .progress-display {
     .wrapper .main__heading {
     font-size: 3rem;
     font-weight: 100;
-    margin-top: 4rem;
+    margin-top: 3.5rem;
 
     .bold {
       font-weight: 500;
@@ -297,6 +299,7 @@ body.main-light .progress-display {
   .button__group {
     padding: 12px;
     gap: 32px;
+    border-radius: 2rem;
   }
 
   .img-wrapper {
@@ -318,6 +321,10 @@ body.main-light .progress-display {
     display: none;
   }
 
+  body {
+    overflow: hidden;
+  }
+
  .main__content {
     display: flex;
     justify-content: space-around;
@@ -326,6 +333,7 @@ body.main-light .progress-display {
   .wrapper .main__heading {
     font-size: 4rem;
     font-weight: 100;
+    margin-top: 0;
 
     .bold {
       font-weight: 500;
