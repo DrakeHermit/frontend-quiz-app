@@ -2,6 +2,7 @@ class CustomButton extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.state = "submit";
   }
 
   connectedCallback() {
@@ -26,10 +27,14 @@ class CustomButton extends HTMLElement {
         }
       </style>
 
-      <button>Submit Answer</button>
+      <button>
+        ${this.state === "submit" ? "Submit answer" : "Next Question"}
+      </button>
     `;
 
-    this.shadowRoot.querySelector("button").addEventListener("click", () => {
+    const button = this.shadowRoot.querySelector("button");
+
+    button.addEventListener("click", () => {
       if (this.handleClick) {
         this.handleClick();
       } else {

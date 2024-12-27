@@ -197,7 +197,8 @@ body.main-light .progress-display {
     font-size: 28px;
     font-weight: 700;
     opacity: 0;
-    visibility: 0;
+    visibility: hidden;
+    transition: all 0.5s ease-in;
   }
 
   .category-description {

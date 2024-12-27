@@ -41,8 +41,13 @@ export class Quiz {
   }
 
   handleAnswer() {
-    this.currentQuestionIndex++;
-    this.displayQuestion();
+    const selectedBtn = this.handleQuestionSubmit();
+    if (selectedBtn) {
+      this.currentQuestionIndex++;
+      this.displayQuestion();
+    } else {
+      console.log("Select an answer");
+    }
   }
 
   async handleCategoryClick(e) {
@@ -51,6 +56,15 @@ export class Quiz {
     this.removeEventListeners();
     this.addCategoryDescription(category);
     this.displayQuestion();
+  }
+
+  handleQuestionSubmit() {
+    const buttons = document.querySelectorAll(".button__group");
+    let selectedBtn;
+    buttons.forEach((button) => {
+      if (button.classList.contains("isSelected")) selectedBtn = button;
+    });
+    return selectedBtn;
   }
 
   displayQuestion() {
@@ -147,7 +161,7 @@ export class Quiz {
      </div>
     `;
     categoryContainer.style.opacity = "1";
-    categoryContainer.style.visibility = "1";
+    categoryContainer.style.visibility = "visible";
   }
 
   addNumericalProgress(element, questionNumber) {
