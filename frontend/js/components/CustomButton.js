@@ -6,6 +6,12 @@ class CustomButton extends HTMLElement {
   }
 
   connectedCallback() {
+    this.render();
+
+    this.handleBtnClick();
+  }
+
+  render() {
     this.shadowRoot.innerHTML = `
       <style>
         button {
@@ -25,20 +31,44 @@ class CustomButton extends HTMLElement {
           background-color: #F6E7FF;
           color: #A729F5;
         }
+        button:disabled {
+          background-color: #ccc;
+          cursor: not-allowed;
+        }
       </style>
 
       <button>
         ${this.state === "submit" ? "Submit answer" : "Next Question"}
       </button>
     `;
+  }
 
+  updateButtonText() {
+    const buttonText =
+      this.state === "submit" ? "Submit answer" : "Next question";
+    this.shadowRoot.querySelector("button").textContent = buttonText;
+  }
+
+  setState(newState) {
+    console.log("Setting state to:", newState);
+    this.state = newState;
+    this.render();
+    this.handleBtnClick();
+  }
+
+  handleBtnClick() {
     const button = this.shadowRoot.querySelector("button");
-
     button.addEventListener("click", () => {
-      if (this.handleClick) {
+      if (this.state === "submit") {
         this.handleClick();
-      } else {
-        console.log("It didnt work");
+      } else if (this.state === "next") {
+        console.log(
+          "Next state detected, nextQuestion exists?:",
+          !!this.nextQuestion
+        );
+        if (this.nextQuestion) {
+          this.nextQuestion();
+        }
       }
     });
   }

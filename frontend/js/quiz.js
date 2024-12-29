@@ -8,6 +8,7 @@ export class Quiz {
     this.currentQuestionIndex = 0;
     this.questions = [];
     this.progressBar = null;
+    this.currentButton;
     this.init();
   }
 
@@ -43,8 +44,7 @@ export class Quiz {
   handleAnswer() {
     const selectedBtn = this.handleQuestionSubmit();
     if (selectedBtn) {
-      this.currentQuestionIndex++;
-      this.displayQuestion();
+      this.validateAnswer();
     } else {
       console.log("Select an answer");
     }
@@ -102,6 +102,7 @@ export class Quiz {
       buttonsContainer.innerHTML = html;
       const submitBtn = this.addSubmitButton(buttonsContainer);
       buttonsContainer.appendChild(submitBtn);
+      this.currentButton = submitBtn;
       this.btnSelected();
       const questionInfoContainer = document.querySelector(".main__left");
       this.initializeProgressBar(questionInfoContainer);
@@ -117,10 +118,27 @@ export class Quiz {
     }
   }
 
+  handleNextQuestion() {
+    console.log("handleNextQuestion called");
+    console.log("Timeout finished, moving to next question");
+    this.currentQuestionIndex++;
+    this.displayQuestion();
+  }
+
   addSubmitButton() {
     const button = document.createElement("custom-button");
+    button.setState("submit");
     button.handleClick = this.handleAnswer.bind(this);
+    button.nextQuestion = this.handleNextQuestion.bind(this);
     return button;
+  }
+
+  validateAnswer() {
+    if (this.currentButton) {
+      console.log("Before state change:", this.currentButton.state);
+      this.currentButton.setState("next");
+      console.log("After state change:", this.currentButton.state);
+    }
   }
 
   initializeProgressBar(container) {
