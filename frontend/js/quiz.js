@@ -7,6 +7,7 @@ export class Quiz {
     this.service = new QuizService();
     this.currentQuestionIndex = 0;
     this.questions = [];
+    this.score = 0;
     this.progressBar = null;
     this.currentButton;
     this.init();
@@ -42,11 +43,48 @@ export class Quiz {
   }
 
   handleAnswer() {
-    const selectedBtn = this.handleQuestionSubmit();
+    const selectedBtn = this.onValidate();
     if (selectedBtn) {
       this.validateAnswer();
     } else {
       console.log("Select an answer");
+    }
+  }
+
+  onValidate() {
+    const questionAnswer = this.questions[
+      this.currentQuestionIndex
+    ].answer.trim();
+    const selectedBtn = this.handleQuestionSubmit();
+    const answerText = selectedBtn.textContent.split(/[A-D]/)[1].trim();
+    const isAnswered = answerText === questionAnswer ? true : false;
+    this.showAnswer(isAnswered, selectedBtn);
+    return selectedBtn;
+  }
+
+  showAnswer(answer, selectedBtn) {
+    const correctAnswer = "/frontend/assets/images/icon-correct.svg";
+    const incorrectAnswer = "/frontend/assets/images/icon-incorrect.svg";
+
+    if (answer) {
+      const div = document.createElement("div");
+      div.innerHTML = `<img src=${correctAnswer}></img>`;
+      div.classList.add("validate");
+      selectedBtn.classList.remove("isSelected");
+      selectedBtn.classList.add("correct-answer");
+      div.style.visibility = "visible";
+      div.style.opacity = "1";
+      selectedBtn.appendChild(div);
+      this.score++;
+    } else {
+      const div = document.createElement("div");
+      div.innerHTML = `<img src=${incorrectAnswer}></img>`;
+      div.classList.add("validate");
+      selectedBtn.classList.remove("isSelected");
+      selectedBtn.classList.add("incorrect-answer");
+      div.style.visibility = "visible";
+      div.style.opacity = "1";
+      selectedBtn.appendChild(div);
     }
   }
 
@@ -115,14 +153,28 @@ export class Quiz {
       );
     } else {
       console.log("Quiz completed!");
+      console.log("Final Score: ", this.score);
     }
   }
 
   handleNextQuestion() {
-    console.log("handleNextQuestion called");
-    console.log("Timeout finished, moving to next question");
+    if (this.currentQuestionIndex === this.questions.length - 2) {
+      this.currentButton.setIsLastQuestion(true);
+    }
+
     this.currentQuestionIndex++;
-    this.displayQuestion();
+    if (this.currentQuestionIndex < this.questions.length) {
+      this.displayQuestion();
+    } else {
+      this.showResults();
+    }
+  }
+
+  showResults() {
+    document.querySelector(".main__content").innerHTML = `
+    <h1>Quiz Finished</h1>
+    <p>You scored ${this.score}</p>
+    `;
   }
 
   addSubmitButton() {
@@ -130,14 +182,16 @@ export class Quiz {
     button.setState("submit");
     button.handleClick = this.handleAnswer.bind(this);
     button.nextQuestion = this.handleNextQuestion.bind(this);
+    button.finishQuiz = this.showResults.bind(this);
     return button;
   }
 
   validateAnswer() {
     if (this.currentButton) {
-      console.log("Before state change:", this.currentButton.state);
-      this.currentButton.setState("next");
-      console.log("After state change:", this.currentButton.state);
+      this.currentButton.setState(
+        "next",
+        this.currentQuestionIndex === this.questions.length - 1
+      );
     }
   }
 

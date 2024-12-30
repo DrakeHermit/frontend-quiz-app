@@ -3,6 +3,7 @@ class CustomButton extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.state = "submit";
+    this.isLastQuestion = false;
   }
 
   connectedCallback() {
@@ -12,6 +13,11 @@ class CustomButton extends HTMLElement {
   }
 
   render() {
+    const buttonText = this.isLastQuestion
+      ? "Finish Quiz"
+      : this.state === "submit"
+      ? "Submit answer"
+      : "Next Question";
     this.shadowRoot.innerHTML = `
       <style>
         button {
@@ -37,9 +43,9 @@ class CustomButton extends HTMLElement {
         }
       </style>
 
-      <button>
-        ${this.state === "submit" ? "Submit answer" : "Next Question"}
-      </button>
+        <button>
+            ${buttonText}
+        </button>
     `;
   }
 
@@ -49,9 +55,15 @@ class CustomButton extends HTMLElement {
     this.shadowRoot.querySelector("button").textContent = buttonText;
   }
 
-  setState(newState) {
-    console.log("Setting state to:", newState);
+  setState(newState, isLast = false) {
     this.state = newState;
+    this.isLastQuestion = isLast;
+    this.render();
+    this.handleBtnClick();
+  }
+
+  setIsLastQuestion(isLast) {
+    this.isLastQuestion = isLast;
     this.render();
     this.handleBtnClick();
   }
@@ -62,11 +74,9 @@ class CustomButton extends HTMLElement {
       if (this.state === "submit") {
         this.handleClick();
       } else if (this.state === "next") {
-        console.log(
-          "Next state detected, nextQuestion exists?:",
-          !!this.nextQuestion
-        );
-        if (this.nextQuestion) {
+        if (this.isLastQuestion && this.finishQuiz) {
+          this.finishQuiz();
+        } else if (this.nextQuestion) {
           this.nextQuestion();
         }
       }
