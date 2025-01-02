@@ -10,6 +10,7 @@ export class Quiz {
     this.score = 0;
     this.progressBar = null;
     this.currentButton;
+    this.selectedCategory;
     this.init();
   }
 
@@ -47,16 +48,35 @@ export class Quiz {
     if (selectedBtn) {
       this.validateAnswer();
     } else {
-      console.log("Select an answer");
+      this.addError();
     }
   }
 
+  addError() {
+    const errorField = document.querySelector(".main__right");
+    const errorSign = "/frontend/assets/images/icon-incorrect.svg";
+    const div = document.createElement("div");
+    div.innerHTML = `
+        <img class="error-mark" src=${errorSign} />
+        <span class="error">Please select an answer</span>
+    `;
+    div.classList.add("error__field");
+    errorField.appendChild(div);
+
+    setTimeout(() => {
+      errorField.removeChild(div);
+    }, 1500);
+  }
+
   onValidate() {
+    let answerText;
     const questionAnswer = this.questions[
       this.currentQuestionIndex
     ].answer.trim();
     const selectedBtn = this.handleQuestionSubmit();
-    const answerText = selectedBtn.textContent.split(/[A-D]/)[1].trim();
+    if (selectedBtn) {
+      answerText = selectedBtn.textContent.split(/[A-D]/)[1].trim();
+    } else return;
     const isAnswered = answerText === questionAnswer ? true : false;
     this.showAnswer(isAnswered, selectedBtn);
     return selectedBtn;
@@ -89,10 +109,10 @@ export class Quiz {
   }
 
   async handleCategoryClick(e) {
-    const category = e.currentTarget.dataset.category;
-    this.questions = await this.service.fetchQuestions(category);
+    this.selectedCategory = e.currentTarget.dataset.category;
+    this.questions = await this.service.fetchQuestions(this.selectedCategory);
     this.removeEventListeners();
-    this.addCategoryDescription(category);
+    this.addCategoryDescription(this.selectedCategory);
     this.displayQuestion();
   }
 
@@ -100,7 +120,9 @@ export class Quiz {
     const buttons = document.querySelectorAll(".button__group");
     let selectedBtn;
     buttons.forEach((button) => {
-      if (button.classList.contains("isSelected")) selectedBtn = button;
+      if (button.classList.contains("isSelected")) {
+        selectedBtn = button;
+      }
     });
     return selectedBtn;
   }
@@ -151,9 +173,6 @@ export class Quiz {
         questionInfoContainer,
         this.currentQuestionIndex
       );
-    } else {
-      console.log("Quiz completed!");
-      console.log("Final Score: ", this.score);
     }
   }
 
@@ -171,9 +190,19 @@ export class Quiz {
   }
 
   showResults() {
+    const category = this.addCategoryDescription(this.selectedCategory);
     document.querySelector(".main__content").innerHTML = `
-    <h1>Quiz Finished</h1>
-    <p>You scored ${this.score}</p>
+    <div class="main__left">
+      <h2>Quiz Completed</h2>
+      <h3>You scored...</h3>
+    </div>
+    <div class="main__right">
+      <div class="score__box">
+        ${category.innerHTML}
+        <div class="score">${this.score}</div>
+        <div class="total__score">out of ${this.questions.length}</div>
+      </div>
+    </div>
     `;
   }
 
@@ -234,6 +263,7 @@ export class Quiz {
     `;
     categoryContainer.style.opacity = "1";
     categoryContainer.style.visibility = "visible";
+    return categoryContainer;
   }
 
   addNumericalProgress(element, questionNumber) {

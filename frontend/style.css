@@ -88,6 +88,51 @@ img {
   }
 }
 
+.score__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  justify-content: center;
+  width: calc(564px - 3rem);
+  border-radius: 2rem;
+  padding: 3rem;
+  background-color: var(--clr-light);
+
+  .category-description {
+    margin-left: 0;
+    color: var(--clr-dark);
+    font-size: 1.5rem;
+  }
+
+  .score {
+    font-size: 128px;
+    font-weight: 600;
+    color: var(--clr-dark);
+  }
+  
+  .total__score {
+    font-size: 2rem;
+    color: var(--light-blue);
+  }
+}
+
+.main__left h2 {
+  color: var(--clr-dark);
+  font-size: 4rem;
+  font-weight: 300;
+}
+
+.main__left {
+    margin: 3rem 0 4rem 0;
+  }
+
+.main__left h3 {
+  font-size: 4rem;
+  font-weight: 600;
+  color: var(--clr-dark);
+}
+
 /* Animate the toggling of themes */
 .toggler .movable.toggle {
   transform: translateX(-12px);
@@ -128,6 +173,18 @@ body.main-light .button__group {
 
 body.main-light h2 {
   color: #3B4D66;
+}
+
+body.main-light h3 {
+  color: #3B4D66;
+}
+
+body.main-light .score {
+  color: #3B4D66;
+}
+
+body.main-light .total__score {
+  color: var(--gray-navy);
 }
 
 body.main-light .progress-display {
@@ -259,6 +316,24 @@ body.main-light .progress-display {
   }
 }
 
+.error {
+  color: var(--incorrect-answer);
+  font-size: 18px;
+}
+
+.error-mark {
+  width: 32px;
+  height: 32px;
+}
+
+.error__field {
+  display: flex;
+  margin-top: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
 /* ------- */
 
 .main__overlay-mobile img,
@@ -303,7 +378,7 @@ body.main-light .progress-display {
     z-index: -1;
   }
 
-    .wrapper .main__heading {
+  .wrapper .main__heading {
     font-size: 3rem;
     font-weight: 100;
     margin-top: 3.5rem;
@@ -315,6 +390,10 @@ body.main-light .progress-display {
 
   .wrapper p {
     font-size: 18px;
+  }
+
+  .main__left {
+    margin: 3rem 0 4rem 0;
   }
 
   .button__group {
@@ -368,6 +447,7 @@ body.main-light .progress-display {
 
 .main__left {
   width: 600px;
+  margin: 0;
 }
 
 .category-description {
