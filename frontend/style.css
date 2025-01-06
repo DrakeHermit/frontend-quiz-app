@@ -94,9 +94,9 @@ img {
   align-items: center;
   gap: 2rem;
   justify-content: center;
-  width: calc(564px - 3rem);
   border-radius: 2rem;
   padding: 3rem;
+  margin-bottom: 2rem;
   background-color: var(--clr-light);
 
   .category-description {
@@ -370,6 +370,10 @@ body.main-light .progress-display {
     overflow: auto;
   }
 
+  .score__box {
+    margin-bottom: 2rem;
+  }
+
   .main__overlay-tablet {
     display: block;
     position: fixed;
@@ -452,6 +456,10 @@ body.main-light .progress-display {
 
 .category-description {
   margin-left: 6rem;
+}
+
+.score__box {
+  width: calc(564px - 3rem);
 }
 
 .button__group {

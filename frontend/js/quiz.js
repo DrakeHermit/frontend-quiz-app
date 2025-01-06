@@ -248,8 +248,15 @@ export class Quiz {
       accessibility: "purple",
     };
 
+    let title = category;
+    if (title === "accessibility" || title === "javascript") {
+      title = title.charAt(0).toUpperCase() + title.slice(1);
+    } else {
+      title = title.toUpperCase();
+    }
+
     const categoryObj = {
-      title: category.toUpperCase(),
+      title: title,
       pictureSrc: `/frontend/assets/images/icon-${category}.svg`,
       bgColor: categoryStyles[category],
     };
