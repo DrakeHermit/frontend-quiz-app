@@ -238,7 +238,7 @@ body.main-light .progress-display {
 .button__group {
   width: 100%;
   background-color: var(--clr-light);
-  gap: 16px;
+  gap: 12px;
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -402,7 +402,6 @@ body.main-light .progress-display {
 
   .button__group {
     padding: 12px;
-    gap: 32px;
     border-radius: 2rem;
   }
 
@@ -463,9 +462,8 @@ body.main-light .progress-display {
 }
 
 .button__group {
-  padding: 15px;
   width: 600px;
-  gap: 32px;
+  padding: 15px;
 }
 
   .wrapper p {
