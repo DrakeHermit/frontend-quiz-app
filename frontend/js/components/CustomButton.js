@@ -2,22 +2,31 @@ class CustomButton extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    this.state = "submit";
-    this.isLastQuestion = false;
   }
 
-  connectedCallback() {
-    this.render();
+  set stateManager(manager) {
+    this._stateManager = manager;
+    // Initialize the component now that we have the manager
+    this.initialize();
+  }
 
-    this.handleBtnClick();
+  get stateManager() {
+    return this._stateManager;
+  }
+
+  initialize() {
+    if (this._stateManager) {
+      this._stateManager.subscribe((newState) => {
+        this.updateButtonText(newState.buttonState);
+      });
+      this.render();
+      this.handleBtnClick();
+    }
   }
 
   render() {
-    const buttonText = this.isLastQuestion
-      ? "Finish Quiz"
-      : this.state === "submit"
-      ? "Submit answer"
-      : "Next Question";
+    if (!this._stateManager) return;
+
     this.shadowRoot.innerHTML = `
       <style>
         button {
@@ -43,42 +52,30 @@ class CustomButton extends HTMLElement {
         }
       </style>
 
-        <button>
-            ${buttonText}
-        </button>
+      <button>
+        ${
+          this._stateManager.state.buttonState === "submit"
+            ? "Submit answer"
+            : "Next question"
+        }
+      </button>
     `;
   }
 
-  updateButtonText() {
-    const buttonText =
-      this.state === "submit" ? "Submit answer" : "Next question";
-    this.shadowRoot.querySelector("button").textContent = buttonText;
-  }
-
-  setState(newState, isLast = false) {
-    this.state = newState;
-    this.isLastQuestion = isLast;
-    this.render();
-    this.handleBtnClick();
-  }
-
-  setIsLastQuestion(isLast) {
-    this.isLastQuestion = isLast;
-    this.render();
-    this.handleBtnClick();
+  updateButtonText(buttonState) {
+    const button = this.shadowRoot.querySelector("button");
+    if (button) {
+      const buttonText =
+        buttonState === "submit" ? "Submit answer" : "Next question";
+      button.textContent = buttonText;
+    }
   }
 
   handleBtnClick() {
     const button = this.shadowRoot.querySelector("button");
     button.addEventListener("click", () => {
-      if (this.state === "submit") {
-        this.handleClick();
-      } else if (this.state === "next") {
-        if (this.isLastQuestion && this.finishQuiz) {
-          this.finishQuiz();
-        } else if (this.nextQuestion) {
-          this.nextQuestion();
-        }
+      if (this._stateManager) {
+        this._stateManager.handleButtonClick();
       }
     });
   }

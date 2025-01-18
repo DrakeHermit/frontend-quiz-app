@@ -1,15 +1,24 @@
 import { QuizService } from "./quiz-service.js";
+import { QuizStateManager } from "./QuizStateManager.js";
 import CustomButton from "./components/CustomButton.js";
 import ProgressBar from "./components/ProgressBar.js";
 
 export class Quiz {
-  constructor() {
-    this.service = new QuizService();
+  constructor(stateManager) {
+    this.stateManager = stateManager;
     this.currentQuestionIndex = 0;
     this.questions = [];
     this.score = 0;
     this.progressBar = null;
     this.currentButton;
+
+    this.stateManager.subscribe((newState) => {
+      if (newState.questions.length > 0) {
+        // If we have questions
+        this.displayQuestion();
+      }
+    });
+
     this.selectedCategory;
     this.init();
   }
@@ -109,11 +118,11 @@ export class Quiz {
   }
 
   async handleCategoryClick(e) {
-    this.selectedCategory = e.currentTarget.dataset.category;
-    this.questions = await this.service.fetchQuestions(this.selectedCategory);
+    const category = e.currentTarget.dataset.category;
+    this.stateManager.handleCategorySelection(category);
+
     this.removeEventListeners();
-    this.addCategoryDescription(this.selectedCategory);
-    this.displayQuestion();
+    this.addCategoryDescription(category);
   }
 
   handleQuestionSubmit() {
@@ -128,33 +137,43 @@ export class Quiz {
   }
 
   displayQuestion() {
-    if (this.currentQuestionIndex <= this.questions.length - 1) {
+    const currentQuestion = this.stateManager.getCurrentQuestion();
+    const currentState = this.stateManager.state;
+
+    if (
+      currentState.currentQuestionIndex <=
+      currentState.questions.length - 1
+    ) {
       const letters = ["A", "B", "C", "D"];
-      const question = this.questions[this.currentQuestionIndex];
 
       const title = document.querySelector(".main__heading");
-      title.textContent = question.question;
+      title.textContent = currentQuestion.question;
       title.style.fontSize = "36px";
 
       const buttonsContainer = document.querySelector(".buttons");
 
+      // Ensure options exists and is an array before mapping
+      const optionsArray = Array.isArray(currentQuestion.options)
+        ? currentQuestion.options
+        : [];
+
       const html = `
         <ul>
-            ${question.options
-              .map(
-                (option, index) => `
-                <li>
-                    <button class="button__group" data-answer="${index}">
-                        <div class="img-wrapper bold-big">
-                            ${letters[index]}
-                        </div>
-                        <span>${option
-                          .replace(/</g, "&lt;")
-                          .replace(/>/g, "&gt;")}</span>
-                    </button>
-                </li>
-            `
-              )
+            ${optionsArray
+              .map((option, index) => {
+                return `
+                    <li>
+                        <button class="button__group" data-answer="${index}">
+                            <div class="img-wrapper bold-big">
+                                ${letters[index]}
+                            </div>
+                            <span>${option
+                              .replace(/</g, "&lt;")
+                              .replace(/>/g, "&gt;")}</span>
+                        </button>
+                    </li>
+                `;
+              })
               .join("")}
         </ul>
     `;
@@ -171,7 +190,7 @@ export class Quiz {
       questionInfoContainer.querySelector("p")?.remove();
       this.addNumericalProgress(
         questionInfoContainer,
-        this.currentQuestionIndex
+        currentState.currentQuestionIndex
       );
     }
   }
@@ -208,10 +227,13 @@ export class Quiz {
 
   addSubmitButton() {
     const button = document.createElement("custom-button");
-    button.setState("submit");
+    // Set the state manager first
+    button.stateManager = this.stateManager;
+    // Add your event handlers
     button.handleClick = this.handleAnswer.bind(this);
     button.nextQuestion = this.handleNextQuestion.bind(this);
     button.finishQuiz = this.showResults.bind(this);
+    // The button will initialize itself when connected to DOM
     return button;
   }
 
