@@ -11,6 +11,7 @@ export class QuizStateManager {
       questions: [],
       selectedCategory: null,
       error: null,
+      score: 0,
     };
     this.subscribers = [];
   }
@@ -24,6 +25,7 @@ export class QuizStateManager {
         currentQuestionIndex: 0,
         buttonState: "submit",
         isLastQuestion: false,
+        isQuizComplete: false,
       });
       return true;
     } catch (error) {
@@ -56,12 +58,21 @@ export class QuizStateManager {
   handleButtonClick() {
     switch (this.state.buttonState) {
       case "submit":
-        // After submitting an answer, change to next state
-        this.setState({ buttonState: "next" });
+        // After submitting an answer, change to next or finish state
+        if (this.state.isLastQuestion) {
+          this.setState({ buttonState: "finish" }); // New state for finish
+        } else {
+          this.setState({ buttonState: "next" });
+        }
         break;
 
       case "next":
         this.handleNextQuestion();
+        break;
+
+      case "finish":
+        // Handle finishing the quiz
+        this.handleFinish();
         break;
     }
   }
@@ -79,5 +90,16 @@ export class QuizStateManager {
       currentQuestionIndex: nextIndex,
       buttonState: "submit", // Reset to submit for new question
     });
+  }
+
+  handleFinish() {
+    this.setState({
+      buttonState: "finish",
+      isQuizComplete: true,
+    });
+  }
+
+  updateScore(newScore) {
+    this.setState({ score: newScore });
   }
 }

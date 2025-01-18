@@ -13,8 +13,10 @@ export class Quiz {
     this.currentButton;
 
     this.stateManager.subscribe((newState) => {
-      if (newState.questions.length > 0) {
-        // If we have questions
+      if (newState.isQuizComplete) {
+        this.showResults();
+        console.log("Quiz is complete");
+      } else if (newState.questions.length > 0) {
         this.displayQuestion();
       }
     });
@@ -209,7 +211,9 @@ export class Quiz {
   }
 
   showResults() {
-    const category = this.addCategoryDescription(this.selectedCategory);
+    const currentState = this.stateManager.state;
+    const category = this.addCategoryDescription(currentState.selectedCategory);
+
     document.querySelector(".main__content").innerHTML = `
     <div class="main__left">
       <h2>Quiz Completed</h2>
@@ -218,8 +222,8 @@ export class Quiz {
     <div class="main__right">
       <div class="score__box">
         ${category.innerHTML}
-        <div class="score">${this.score}</div>
-        <div class="total__score">out of ${this.questions.length}</div>
+        <div class="score">${currentState.score}</div>
+        <div class="total__score">out of ${currentState.questions.length}</div>
       </div>
     </div>
     `;

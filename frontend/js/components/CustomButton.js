@@ -56,6 +56,8 @@ class CustomButton extends HTMLElement {
         ${
           this._stateManager.state.buttonState === "submit"
             ? "Submit answer"
+            : this._stateManager.state.buttonState === "finish"
+            ? "Finish Quiz"
             : "Next question"
         }
       </button>
@@ -65,8 +67,11 @@ class CustomButton extends HTMLElement {
   updateButtonText(buttonState) {
     const button = this.shadowRoot.querySelector("button");
     if (button) {
-      const buttonText =
-        buttonState === "submit" ? "Submit answer" : "Next question";
+      const buttonText = {
+        submit: "Submit answer",
+        next: "Next question",
+        finish: "Finish Quiz",
+      }[buttonState];
       button.textContent = buttonText;
     }
   }
