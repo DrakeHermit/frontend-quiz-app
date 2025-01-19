@@ -58,9 +58,8 @@ export class QuizStateManager {
   handleButtonClick() {
     switch (this.state.buttonState) {
       case "submit":
-        // After submitting an answer, change to next or finish state
         if (this.state.isLastQuestion) {
-          this.setState({ buttonState: "finish" }); // New state for finish
+          this.setState({ buttonState: "finish" });
         } else {
           this.setState({ buttonState: "next" });
         }
@@ -71,7 +70,6 @@ export class QuizStateManager {
         break;
 
       case "finish":
-        // Handle finishing the quiz
         this.handleFinish();
         break;
     }
@@ -88,7 +86,7 @@ export class QuizStateManager {
 
     this.setState({
       currentQuestionIndex: nextIndex,
-      buttonState: "submit", // Reset to submit for new question
+      buttonState: "submit",
     });
   }
 

@@ -1,10 +1,20 @@
-class ProgressBar extends HTMLElement {
+export default class ProgressBar extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.render(); // Render the base structure right away
   }
 
-  connectedCallback() {
+  set stateManager(manager) {
+    this._stateManager = manager;
+    this.initialize();
+  }
+
+  get stateManager() {
+    return this._stateManager;
+  }
+
+  render() {
     this.shadowRoot.innerHTML = `
       <style>
         .container {
@@ -23,6 +33,7 @@ class ProgressBar extends HTMLElement {
           background-color: var(--purple-color, #A729F5);
           border-radius: 4px;
           transition: width 0.4s ease-in;
+          width: 0%; 
         }
         
         @media(min-width: 640px) {
@@ -43,14 +54,28 @@ class ProgressBar extends HTMLElement {
     `;
   }
 
+  initialize() {
+    if (this._stateManager) {
+      this._stateManager.subscribe((newState) => {
+        if (newState.questions.length > 0) {
+          // Only update if we have questions
+          this.updateProgress(
+            newState.currentQuestionIndex + 1,
+            newState.questions.length
+          );
+        }
+      });
+    }
+  }
+
   updateProgress(current, total) {
-    const progress = (current / total) * 100;
-    this.shadowRoot.querySelector(
-      ".progress-fill"
-    ).style.width = `${progress}%`;
+    const fill = this.shadowRoot.querySelector(".progress-fill");
+    if (fill) {
+      // Check if element exists
+      const progress = (current / total) * 100;
+      fill.style.width = `${progress}%`;
+    }
   }
 }
 
 customElements.define("progress-bar", ProgressBar);
-
-export default ProgressBar;

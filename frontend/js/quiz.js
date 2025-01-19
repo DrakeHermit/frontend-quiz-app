@@ -186,8 +186,9 @@ export class Quiz {
       this.currentButton = submitBtn;
       this.btnSelected();
       const questionInfoContainer = document.querySelector(".main__left");
-      this.initializeProgressBar(questionInfoContainer);
-      this.updateProgress();
+      if (currentState.questions.length > 0) {
+        this.initializeProgressBar(questionInfoContainer);
+      }
       questionInfoContainer.querySelector(".progress-display")?.remove();
       questionInfoContainer.querySelector("p")?.remove();
       this.addNumericalProgress(
@@ -231,13 +232,10 @@ export class Quiz {
 
   addSubmitButton() {
     const button = document.createElement("custom-button");
-    // Set the state manager first
     button.stateManager = this.stateManager;
-    // Add your event handlers
     button.handleClick = this.handleAnswer.bind(this);
     button.nextQuestion = this.handleNextQuestion.bind(this);
     button.finishQuiz = this.showResults.bind(this);
-    // The button will initialize itself when connected to DOM
     return button;
   }
 
@@ -253,16 +251,8 @@ export class Quiz {
   initializeProgressBar(container) {
     if (!this.progressBar) {
       this.progressBar = document.createElement("progress-bar");
+      this.progressBar.stateManager = this.stateManager;
       container.appendChild(this.progressBar);
-    }
-  }
-
-  updateProgress() {
-    if (this.progressBar) {
-      this.progressBar.updateProgress(
-        this.currentQuestionIndex + 1,
-        this.questions.length
-      );
     }
   }
 
