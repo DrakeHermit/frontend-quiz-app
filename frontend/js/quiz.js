@@ -6,18 +6,19 @@ import ProgressBar from "./components/ProgressBar.js";
 export class Quiz {
   constructor(stateManager) {
     this.stateManager = stateManager;
-    this.currentQuestionIndex = 0;
-    this.questions = [];
-    this.score = 0;
     this.progressBar = null;
     this.currentButton;
 
     this.stateManager.subscribe((newState) => {
       if (newState.isQuizComplete) {
         this.showResults();
-        console.log("Quiz is complete");
       } else if (newState.questions.length > 0) {
         this.displayQuestion();
+        if (newState.buttonState === "submit") {
+          this.btnSelected();
+        } else {
+          console.log("Nothing to submit");
+        }
       }
     });
 
@@ -184,7 +185,6 @@ export class Quiz {
       const submitBtn = this.addSubmitButton(buttonsContainer);
       buttonsContainer.appendChild(submitBtn);
       this.currentButton = submitBtn;
-      this.btnSelected();
       const questionInfoContainer = document.querySelector(".main__left");
       if (currentState.questions.length > 0) {
         this.initializeProgressBar(questionInfoContainer);
