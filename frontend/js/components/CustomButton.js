@@ -6,7 +6,6 @@ class CustomButton extends HTMLElement {
 
   set stateManager(manager) {
     this._stateManager = manager;
-    // Initialize the component now that we have the manager
     this.initialize();
   }
 
@@ -16,8 +15,20 @@ class CustomButton extends HTMLElement {
 
   initialize() {
     if (this._stateManager) {
-      this._stateManager.subscribe((newState) => {
-        this.updateButtonText(newState.buttonState);
+      this._stateManager.subscribe((state) => {
+        // Update button text based on phase
+        switch (state.phase) {
+          case "answering":
+            this.updateButtonText("Submit Answer");
+            break;
+          case "answered":
+            if (state.isLastQuestion) {
+              this.updateButtonText("Finish Quiz");
+            } else {
+              this.updateButtonText("Next Question");
+            }
+            break;
+        }
       });
       this.render();
       this.handleBtnClick();
@@ -64,24 +75,17 @@ class CustomButton extends HTMLElement {
     `;
   }
 
-  updateButtonText(buttonState) {
+  updateButtonText(text) {
     const button = this.shadowRoot.querySelector("button");
     if (button) {
-      const buttonText = {
-        submit: "Submit answer",
-        next: "Next question",
-        finish: "Finish Quiz",
-      }[buttonState];
-      button.textContent = buttonText;
+      button.textContent = text;
     }
   }
 
   handleBtnClick() {
     const button = this.shadowRoot.querySelector("button");
     button.addEventListener("click", () => {
-      if (this._stateManager) {
-        this._stateManager.handleButtonClick();
-      }
+      this._stateManager.handleButtonClick();
     });
   }
 }

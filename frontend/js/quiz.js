@@ -9,16 +9,11 @@ export class Quiz {
     this.progressBar = null;
     this.currentButton;
 
-    this.stateManager.subscribe((newState) => {
-      if (newState.isQuizComplete) {
-        this.showResults();
-      } else if (newState.questions.length > 0) {
+    this.stateManager.subscribe((state) => {
+      if (state.phase === "answering") {
         this.displayQuestion();
-        if (newState.buttonState === "submit") {
-          this.btnSelected();
-        } else {
-          console.log("Nothing to submit");
-        }
+      } else if (state.phase === "completed") {
+        this.showResults();
       }
     });
 
@@ -44,24 +39,33 @@ export class Quiz {
       .forEach((button) => button.replaceWith(button.cloneNode(true)));
   }
 
-  btnSelected() {
-    const checkedBtn = document.querySelectorAll(".button__group");
-
-    checkedBtn.forEach((button) => {
-      button.addEventListener("click", () => {
-        checkedBtn.forEach((btn) => btn.classList.remove("isSelected"));
-        button.classList.add("isSelected");
-      });
-    });
+  updateButtonState() {
+    if (this.currentButton) {
+      const state = this.stateManager.state;
+      if (state.phase === "answered" && state.isLastQuestion) {
+        this.currentButton.textContent = "Finish Quiz";
+      } else if (state.phase === "answered") {
+        this.currentButton.textContent = "Next Question";
+      } else {
+        this.currentButton.textContent = "Submit Answer";
+      }
+    }
   }
 
-  handleAnswer() {
-    const selectedBtn = this.onValidate();
-    if (selectedBtn) {
-      this.validateAnswer();
-    } else {
-      this.addError();
-    }
+  setupAnswerButtons() {
+    const checkedBtn = document.querySelectorAll(".button__group");
+    checkedBtn.forEach((button, index) => {
+      // Add selected class if this was the selected answer
+      if (index === this.stateManager.state.selectedAnswer) {
+        button.classList.add("isSelected");
+      }
+
+      button.addEventListener("click", (e) => {
+        checkedBtn.forEach((btn) => btn.classList.remove("isSelected"));
+        e.currentTarget.classList.add("isSelected");
+        this.stateManager.setState({ selectedAnswer: index });
+      });
+    });
   }
 
   addError() {
@@ -78,20 +82,6 @@ export class Quiz {
     setTimeout(() => {
       errorField.removeChild(div);
     }, 1500);
-  }
-
-  onValidate() {
-    let answerText;
-    const questionAnswer = this.questions[
-      this.currentQuestionIndex
-    ].answer.trim();
-    const selectedBtn = this.handleQuestionSubmit();
-    if (selectedBtn) {
-      answerText = selectedBtn.textContent.split(/[A-D]/)[1].trim();
-    } else return;
-    const isAnswered = answerText === questionAnswer ? true : false;
-    this.showAnswer(isAnswered, selectedBtn);
-    return selectedBtn;
   }
 
   showAnswer(answer, selectedBtn) {
@@ -126,17 +116,6 @@ export class Quiz {
 
     this.removeEventListeners();
     this.addCategoryDescription(category);
-  }
-
-  handleQuestionSubmit() {
-    const buttons = document.querySelectorAll(".button__group");
-    let selectedBtn;
-    buttons.forEach((button) => {
-      if (button.classList.contains("isSelected")) {
-        selectedBtn = button;
-      }
-    });
-    return selectedBtn;
   }
 
   displayQuestion() {
@@ -195,19 +174,7 @@ export class Quiz {
         questionInfoContainer,
         currentState.currentQuestionIndex
       );
-    }
-  }
-
-  handleNextQuestion() {
-    if (this.currentQuestionIndex === this.questions.length - 2) {
-      this.currentButton.setIsLastQuestion(true);
-    }
-
-    this.currentQuestionIndex++;
-    if (this.currentQuestionIndex < this.questions.length) {
-      this.displayQuestion();
-    } else {
-      this.showResults();
+      this.setupAnswerButtons();
     }
   }
 
@@ -233,19 +200,7 @@ export class Quiz {
   addSubmitButton() {
     const button = document.createElement("custom-button");
     button.stateManager = this.stateManager;
-    button.handleClick = this.handleAnswer.bind(this);
-    button.nextQuestion = this.handleNextQuestion.bind(this);
-    button.finishQuiz = this.showResults.bind(this);
     return button;
-  }
-
-  validateAnswer() {
-    if (this.currentButton) {
-      this.currentButton.setState(
-        "next",
-        this.currentQuestionIndex === this.questions.length - 1
-      );
-    }
   }
 
   initializeProgressBar(container) {

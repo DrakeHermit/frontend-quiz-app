@@ -33,7 +33,7 @@ export default class ProgressBar extends HTMLElement {
           background-color: var(--purple-color, #A729F5);
           border-radius: 4px;
           transition: width 0.4s ease-in;
-          width: 0%; 
+          width: 10%; 
         }
         
         @media(min-width: 640px) {
