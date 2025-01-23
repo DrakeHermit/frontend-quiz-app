@@ -40,11 +40,22 @@ export class QuizStateManager {
   handleButtonClick() {
     switch (this.state.phase) {
       case "answering":
+        if (this.state.selectedAnswer === null) {
+          this.setState({ showError: true });
+          return;
+        }
+
         if (this.state.selectedAnswer !== null) {
           const isCorrect = this.validateAnswer(this.state.selectedAnswer);
+          const correctAnswerIndex = this.getCurrentQuestion().options.findIndex(
+            (option) => option === this.getCurrentQuestion().answer
+          );
           this.setState({
             phase: "answered",
             score: isCorrect ? this.state.score + 1 : this.state.score,
+            isCorrect,
+            correctAnswerIndex,
+            showError: false,
           });
         }
         break;

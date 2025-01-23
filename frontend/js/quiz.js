@@ -10,8 +10,24 @@ export class Quiz {
     this.currentButton;
 
     this.stateManager.subscribe((state) => {
+      if (state.showError) {
+        this.addError();
+      }
+
       if (state.phase === "answering") {
         this.displayQuestion();
+      } else if (state.phase === "answered") {
+        const buttons = document.querySelectorAll(".button__group");
+
+        const selectedBtn = buttons[state.selectedAnswer];
+        const correctBtn = buttons[state.correctAnswerIndex];
+
+        if (state.isCorrect) {
+          this.showAnswer(true, selectedBtn);
+        } else {
+          this.showAnswer(false, selectedBtn);
+          this.showCorrectAnswer(correctBtn);
+        }
       } else if (state.phase === "completed") {
         this.showResults();
       }
@@ -55,7 +71,6 @@ export class Quiz {
   setupAnswerButtons() {
     const checkedBtn = document.querySelectorAll(".button__group");
     checkedBtn.forEach((button, index) => {
-      // Add selected class if this was the selected answer
       if (index === this.stateManager.state.selectedAnswer) {
         button.classList.add("isSelected");
       }
@@ -63,7 +78,10 @@ export class Quiz {
       button.addEventListener("click", (e) => {
         checkedBtn.forEach((btn) => btn.classList.remove("isSelected"));
         e.currentTarget.classList.add("isSelected");
-        this.stateManager.setState({ selectedAnswer: index });
+        this.stateManager.setState({
+          selectedAnswer: index,
+          showError: false,
+        });
       });
     });
   }
@@ -108,6 +126,16 @@ export class Quiz {
       div.style.opacity = "1";
       selectedBtn.appendChild(div);
     }
+  }
+
+  showCorrectAnswer(correctBtn) {
+    const correctAnswer = "/frontend/assets/images/icon-correct.svg";
+    const div = document.createElement("div");
+    div.innerHTML = `<img src=${correctAnswer}></img>`;
+    div.classList.add("validate");
+    div.style.visibility = "visible";
+    div.style.opacity = "1";
+    correctBtn.appendChild(div);
   }
 
   async handleCategoryClick(e) {
