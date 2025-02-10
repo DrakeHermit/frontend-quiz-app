@@ -115,7 +115,6 @@ export class Quiz {
       div.style.visibility = "visible";
       div.style.opacity = "1";
       selectedBtn.appendChild(div);
-      this.score++;
     } else {
       const div = document.createElement("div");
       div.innerHTML = `<img src=${incorrectAnswer}></img>`;
@@ -162,7 +161,6 @@ export class Quiz {
 
       const buttonsContainer = document.querySelector(".buttons");
 
-      // Ensure options exists and is an array before mapping
       const optionsArray = Array.isArray(currentQuestion.options)
         ? currentQuestion.options
         : [];
@@ -189,7 +187,7 @@ export class Quiz {
     `;
 
       buttonsContainer.innerHTML = html;
-      const submitBtn = this.addSubmitButton(buttonsContainer);
+      const submitBtn = this.addSubmitButton();
       buttonsContainer.appendChild(submitBtn);
       this.currentButton = submitBtn;
       const questionInfoContainer = document.querySelector(".main__left");
@@ -209,8 +207,10 @@ export class Quiz {
   showResults() {
     const currentState = this.stateManager.state;
     const category = this.addCategoryDescription(currentState.selectedCategory);
+    const resetBtn = this.addSubmitButton();
+    const layout = document.querySelector(".main__content");
 
-    document.querySelector(".main__content").innerHTML = `
+    layout.innerHTML = `
     <div class="main__left">
       <h2>Quiz Completed</h2>
       <h3>You scored...</h3>
@@ -223,6 +223,9 @@ export class Quiz {
       </div>
     </div>
     `;
+
+    const btnContainer = document.querySelector(".main__right");
+    btnContainer.appendChild(resetBtn);
   }
 
   addSubmitButton() {
