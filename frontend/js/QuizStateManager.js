@@ -12,6 +12,7 @@ export class QuizStateManager {
       score: 0,
       isLastQuestion: false,
       selectedCategory: null,
+      quizFinished: false,
     };
     this.subscribers = [];
   }
@@ -30,7 +31,7 @@ export class QuizStateManager {
     this.setState({
       phase: "answering",
       questions,
-      selectedCategory: category, // Set the category
+      selectedCategory: category,
       currentQuestionIndex: 0,
       selectedAnswer: null,
       isLastQuestion: questions.length === 1,
@@ -73,6 +74,17 @@ export class QuizStateManager {
           });
         }
         break;
+
+      case "finished":
+        if (this.state.quizFinished) {
+          this.setState({
+            currentQuestionIndex: 0,
+            questions: [],
+            score: 0,
+            selectedCategory: null,
+            quizFinished: true,
+          });
+        }
     }
   }
 

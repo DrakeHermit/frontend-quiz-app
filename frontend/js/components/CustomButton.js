@@ -28,6 +28,10 @@ class CustomButton extends HTMLElement {
               this.updateButtonText("Next Question");
             }
             break;
+          case "finished":
+            if (state.quizFinished) {
+              console.log("Quiz is finished");
+            }
         }
       });
       this.render();
