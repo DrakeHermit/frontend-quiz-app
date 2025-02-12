@@ -4,7 +4,7 @@ export class QuizStateManager {
   constructor() {
     this.service = new QuizService();
     this.state = {
-      phase: "answering",
+      phase: "",
       buttonState: "submit",
       currentQuestionIndex: 0,
       questions: [],
@@ -12,7 +12,6 @@ export class QuizStateManager {
       score: 0,
       isLastQuestion: false,
       selectedCategory: null,
-      quizFinished: false,
     };
     this.subscribers = [];
   }
@@ -75,27 +74,19 @@ export class QuizStateManager {
         }
         break;
 
-      case "finished":
-        if (this.state.quizFinished) {
-          this.setState({
-            currentQuestionIndex: 0,
-            questions: [],
-            score: 0,
-            selectedCategory: null,
-            quizFinished: true,
-          });
-        }
+      case "completed":
+        this.setState({
+          phase: "initial",
+          currentQuestionIndex: 0,
+          questions: [],
+          score: 0,
+          selectedCategory: null,
+          selectedAnswer: null,
+          isLastQuestion: false,
+          showError: false,
+        });
+        break;
     }
-  }
-
-  moveToNextQuestion() {
-    const nextIndex = this.state.currentQuestionIndex + 1;
-    this.setState({
-      phase: "answering",
-      currentQuestionIndex: nextIndex,
-      selectedAnswer: null,
-      isLastQuestion: nextIndex === this.state.questions.length - 1,
-    });
   }
 
   validateAnswer(selectedAnswer) {

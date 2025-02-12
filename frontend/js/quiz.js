@@ -9,27 +9,69 @@ export class Quiz {
     this.progressBar = null;
     this.currentButton;
 
+    this.initialHTML = `
+      <div class="main__left">
+        <h1>Welcome to the Frontend Quiz!</h1>
+        <p>Pick a subject to get started.</p>
+      </div>
+      <div class="main__right">
+        <div role="group" class="buttons" aria-label="Quiz Categories">
+              <ul>
+                <li>
+                  <button class="button__group" data-category="html">
+                    <div class="img-wrapper orange"><img src="/frontend/assets/images/icon-html.svg" alt=""></div>
+                    <span>HTML</span>
+                  </button>
+                </li>
+                <li>
+                  <button class="button__group" data-category="css">
+                    <div class="img-wrapper green"><img src="/frontend/assets/images/icon-css.svg" alt=""></div>
+                    <span>CSS</span>
+                  </button>
+                </li>
+                <li>
+                  <button class="button__group" data-category="javascript">
+                    <div class="img-wrapper blue"><img src="/frontend/assets/images/icon-javascript.svg" alt=""></div>
+                    <span>Javascript</span>
+                  </button>
+                </li>
+                <li>
+                  <button class="button__group" data-category="accessibility">
+                    <div class="img-wrapper purple"><img src="/frontend/assets/images/icon-accessibility.svg" alt=""></div>
+                    <span>Accessibility</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+      </div>
+    `;
+
     this.stateManager.subscribe((state) => {
       if (state.showError) {
         this.addError();
       }
 
-      if (state.phase === "answering") {
-        this.displayQuestion();
-      } else if (state.phase === "answered") {
-        const buttons = document.querySelectorAll(".button__group");
+      switch (state.phase) {
+        case "answering":
+          this.displayQuestion();
+          break;
 
-        const selectedBtn = buttons[state.selectedAnswer];
-        const correctBtn = buttons[state.correctAnswerIndex];
+        case "answered":
+          const buttons = document.querySelectorAll(".button__group");
+          const selectedBtn = buttons[state.selectedAnswer];
+          const correctBtn = buttons[state.correctAnswerIndex];
 
-        if (state.isCorrect) {
-          this.showAnswer(true, selectedBtn);
-        } else {
-          this.showAnswer(false, selectedBtn);
-          this.showCorrectAnswer(correctBtn);
-        }
-      } else if (state.phase === "completed") {
-        this.showResults();
+          if (state.isCorrect) {
+            this.showAnswer(true, selectedBtn);
+          } else {
+            this.showAnswer(false, selectedBtn);
+            this.showCorrectAnswer(correctBtn);
+          }
+          break;
+
+        case "completed":
+          this.showResults();
+          break;
       }
     });
 
@@ -53,19 +95,6 @@ export class Quiz {
     document
       .querySelectorAll("[data-category]")
       .forEach((button) => button.replaceWith(button.cloneNode(true)));
-  }
-
-  updateButtonState() {
-    if (this.currentButton) {
-      const state = this.stateManager.state;
-      if (state.phase === "answered" && state.isLastQuestion) {
-        this.currentButton.textContent = "Finish Quiz";
-      } else if (state.phase === "answered") {
-        this.currentButton.textContent = "Next Question";
-      } else {
-        this.currentButton.textContent = "Submit Answer";
-      }
-    }
   }
 
   setupAnswerButtons() {
@@ -207,7 +236,6 @@ export class Quiz {
   showResults() {
     const currentState = this.stateManager.state;
     const category = this.addCategoryDescription(currentState.selectedCategory);
-    const resetBtn = this.addSubmitButton();
     const layout = document.querySelector(".main__content");
 
     layout.innerHTML = `
@@ -221,11 +249,12 @@ export class Quiz {
         <div class="score">${currentState.score}</div>
         <div class="total__score">out of ${currentState.questions.length}</div>
       </div>
+      <custom-button></custom-button>
     </div>
     `;
 
-    const btnContainer = document.querySelector(".main__right");
-    btnContainer.appendChild(resetBtn);
+    const button = layout.querySelector("custom-button");
+    button.stateManager = this.stateManager;
   }
 
   addSubmitButton() {

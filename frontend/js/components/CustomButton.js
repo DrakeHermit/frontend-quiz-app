@@ -15,28 +15,28 @@ class CustomButton extends HTMLElement {
 
   initialize() {
     if (this._stateManager) {
-      this._stateManager.subscribe((state) => {
-        // Update button text based on phase
-        switch (state.phase) {
-          case "answering":
-            this.updateButtonText("Submit Answer");
-            break;
-          case "answered":
-            if (state.isLastQuestion) {
-              this.updateButtonText("Finish Quiz");
-            } else {
-              this.updateButtonText("Next Question");
-            }
-            break;
-          case "finished":
-            if (state.quizFinished) {
-              console.log("Quiz is finished");
-            }
-        }
-      });
+      // Keep track if we're already subscribed
+      if (!this.isSubscribed) {
+        this._stateManager.subscribe((state) => {
+          switch (state.phase) {
+            case "answering":
+              this.updateButtonText("Submit Answer");
+              break;
+            case "answered":
+              this.updateButtonText(
+                state.isLastQuestion ? "Finish Quiz" : "Next Question"
+              );
+              break;
+            case "initial":
+              this.updateButtonText("Play Again");
+              break;
+          }
+        });
+        this.isSubscribed = true; // Mark as subscribed
+      }
       this.render();
-      this.handleBtnClick();
     }
+    this.handleBtnClick();
   }
 
   render() {
