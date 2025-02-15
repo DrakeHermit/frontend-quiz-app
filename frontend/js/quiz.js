@@ -11,9 +11,12 @@ export class Quiz {
 
     this.initialHTML = `
       <div class="main__left">
-        <h1>Welcome to the Frontend Quiz!</h1>
-        <p>Pick a subject to get started.</p>
-      </div>
+            <h1 class="main__heading">
+              Welcome to the <br />
+              <span class="bold">Frontend Quiz!</span>
+            </h1>
+            <p id="remove">Pick a subject to get started.</p>
+          </div>
       <div class="main__right">
         <div role="group" class="buttons" aria-label="Quiz Categories">
               <ul>
@@ -71,7 +74,10 @@ export class Quiz {
 
         case "completed":
           this.showResults();
+          console.log(state.phase);
           break;
+
+        case "initial":
       }
     });
 
