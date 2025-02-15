@@ -9,7 +9,50 @@ export class Quiz {
     this.progressBar = null;
     this.currentButton;
 
-    this.initialHTML = `
+    this.stateManager.subscribe((state) => {
+      if (state.showError) {
+        this.addError();
+      }
+
+      switch (state.phase) {
+        case "answering":
+          this.displayQuestion();
+          break;
+
+        case "answered":
+          const buttons = document.querySelectorAll(".button__group");
+          const selectedBtn = buttons[state.selectedAnswer];
+          const correctBtn = buttons[state.correctAnswerIndex];
+
+          if (state.isCorrect) {
+            this.showAnswer(true, selectedBtn);
+          } else {
+            this.showAnswer(false, selectedBtn);
+            this.showCorrectAnswer(correctBtn);
+          }
+          break;
+
+        case "completed":
+          this.showResults();
+          break;
+
+        case "initial":
+          this.displayUI();
+      }
+    });
+
+    this.selectedCategory;
+    this.init();
+  }
+
+  init() {
+    this.addEventListeners();
+  }
+
+  displayUI() {
+    const mainUIComponent = document.querySelector(".main__content");
+    const currentState = this.stateManager.state;
+    mainUIComponent.innerHTML = `
       <div class="main__left">
             <h1 class="main__heading">
               Welcome to the <br />
@@ -49,44 +92,12 @@ export class Quiz {
       </div>
     `;
 
-    this.stateManager.subscribe((state) => {
-      if (state.showError) {
-        this.addError();
-      }
-
-      switch (state.phase) {
-        case "answering":
-          this.displayQuestion();
-          break;
-
-        case "answered":
-          const buttons = document.querySelectorAll(".button__group");
-          const selectedBtn = buttons[state.selectedAnswer];
-          const correctBtn = buttons[state.correctAnswerIndex];
-
-          if (state.isCorrect) {
-            this.showAnswer(true, selectedBtn);
-          } else {
-            this.showAnswer(false, selectedBtn);
-            this.showCorrectAnswer(correctBtn);
-          }
-          break;
-
-        case "completed":
-          this.showResults();
-          console.log(state.phase);
-          break;
-
-        case "initial":
-      }
-    });
-
-    this.selectedCategory;
-    this.init();
-  }
-
-  init() {
     this.addEventListeners();
+    const questionInfoContainer = document.querySelector(".main__left");
+    console.log(questionInfoContainer);
+    if (currentState.questions.length > 0) {
+      this.initializeProgressBar(questionInfoContainer);
+    }
   }
 
   addEventListeners() {
