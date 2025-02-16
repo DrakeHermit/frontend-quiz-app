@@ -15,7 +15,6 @@ class CustomButton extends HTMLElement {
 
   initialize() {
     if (this._stateManager) {
-      // Keep track if we're already subscribed
       if (!this.isSubscribed) {
         this._stateManager.subscribe((state) => {
           switch (state.phase) {
@@ -32,7 +31,7 @@ class CustomButton extends HTMLElement {
               break;
           }
         });
-        this.isSubscribed = true; // Mark as subscribed
+        this.isSubscribed = true;
       }
       this.render();
     }

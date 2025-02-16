@@ -247,6 +247,10 @@ body.main-light .progress-display {
   margin-bottom: 15px;
   cursor: pointer;
 
+  &:disabled {
+    cursor: auto;
+  }
+
   span {
     color: #fff;
     font-size: 18px;

@@ -14,15 +14,25 @@ export class Quiz {
         this.addError();
       }
 
+      if (state.questions.length > 0 && !this.progressBar) {
+        const container = document.querySelector(".main__left");
+        this.initializeProgressBar(container);
+      }
+
+      const buttons = document.querySelectorAll(".button__group");
       switch (state.phase) {
         case "answering":
+          // Enable buttons before validation
+          buttons.forEach((btn) => btn.disabled.false);
           this.displayQuestion();
           break;
 
         case "answered":
-          const buttons = document.querySelectorAll(".button__group");
           const selectedBtn = buttons[state.selectedAnswer];
           const correctBtn = buttons[state.correctAnswerIndex];
+
+          // Disable buttons after validation
+          buttons.forEach((btn) => (btn.disabled = true));
 
           if (state.isCorrect) {
             this.showAnswer(true, selectedBtn);
@@ -37,6 +47,7 @@ export class Quiz {
           break;
 
         case "initial":
+          this.progressBar = null;
           this.displayUI();
       }
     });
@@ -51,7 +62,6 @@ export class Quiz {
 
   displayUI() {
     const mainUIComponent = document.querySelector(".main__content");
-    const currentState = this.stateManager.state;
     mainUIComponent.innerHTML = `
       <div class="main__left">
             <h1 class="main__heading">
@@ -93,11 +103,6 @@ export class Quiz {
     `;
 
     this.addEventListeners();
-    const questionInfoContainer = document.querySelector(".main__left");
-    console.log(questionInfoContainer);
-    if (currentState.questions.length > 0) {
-      this.initializeProgressBar(questionInfoContainer);
-    }
   }
 
   addEventListeners() {
@@ -237,9 +242,6 @@ export class Quiz {
       buttonsContainer.appendChild(submitBtn);
       this.currentButton = submitBtn;
       const questionInfoContainer = document.querySelector(".main__left");
-      if (currentState.questions.length > 0) {
-        this.initializeProgressBar(questionInfoContainer);
-      }
       questionInfoContainer.querySelector(".progress-display")?.remove();
       questionInfoContainer.querySelector("p")?.remove();
       this.addNumericalProgress(
@@ -281,11 +283,9 @@ export class Quiz {
   }
 
   initializeProgressBar(container) {
-    if (!this.progressBar) {
-      this.progressBar = document.createElement("progress-bar");
-      this.progressBar.stateManager = this.stateManager;
-      container.appendChild(this.progressBar);
-    }
+    this.progressBar = document.createElement("progress-bar");
+    this.progressBar.stateManager = this.stateManager;
+    container.appendChild(this.progressBar);
   }
 
   addCategoryDescription(category) {

@@ -18,6 +18,10 @@ export class QuizStateManager {
 
   subscribe(callback) {
     this.subscribers.push(callback);
+
+    return () => {
+      this.subscribers = this.subscribers.filter((cb) => cb !== callback);
+    };
   }
 
   setState(newState) {

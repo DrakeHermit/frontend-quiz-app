@@ -2,7 +2,16 @@ export default class ProgressBar extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    this.render(); // Render the base structure right away
+  }
+
+  connectedCallback() {
+    this.render();
+  }
+
+  disconnectedCallback() {
+    if (this._stateManager && this.unsubscribe) {
+      this.unsubscribe();
+    }
   }
 
   set stateManager(manager) {
@@ -56,9 +65,8 @@ export default class ProgressBar extends HTMLElement {
 
   initialize() {
     if (this._stateManager) {
-      this._stateManager.subscribe((newState) => {
+      this.unsubscribe = this._stateManager.subscribe((newState) => {
         if (newState.questions.length > 0) {
-          // Only update if we have questions
           this.updateProgress(
             newState.currentQuestionIndex + 1,
             newState.questions.length
@@ -71,7 +79,6 @@ export default class ProgressBar extends HTMLElement {
   updateProgress(current, total) {
     const fill = this.shadowRoot.querySelector(".progress-fill");
     if (fill) {
-      // Check if element exists
       const progress = (current / total) * 100;
       fill.style.width = `${progress}%`;
     }
