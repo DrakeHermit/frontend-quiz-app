@@ -12,6 +12,7 @@ export class QuizStateManager {
       score: 0,
       isLastQuestion: false,
       selectedCategory: null,
+      isLoading: false,
     };
     this.subscribers = [];
   }
@@ -30,15 +31,25 @@ export class QuizStateManager {
   }
 
   async handleCategorySelection(category) {
-    const questions = await this.service.fetchQuestions(category);
-    this.setState({
-      phase: "answering",
-      questions,
-      selectedCategory: category,
-      currentQuestionIndex: 0,
-      selectedAnswer: null,
-      isLastQuestion: questions.length === 1,
-    });
+    try {
+      this.setState({ isLoading: true });
+
+      const questions = await this.service.fetchQuestions(category);
+
+      this.setState({
+        phase: "answering",
+        questions,
+        selectedCategory: category,
+        currentQuestionIndex: 0,
+        selectedAnswer: null,
+        isLastQuestion: questions.length === 1,
+        score: 0,
+        isLoading: false,
+      });
+    } catch (error) {
+      console.log("An error has occurred while fetching the data: ", error);
+      this.setState({ isLoading: false });
+    }
   }
 
   handleButtonClick() {
