@@ -11,10 +11,6 @@ export class Quiz {
     this.currentButton;
 
     this.stateManager.subscribe((state) => {
-      if (state.showError) {
-        this.addError();
-      }
-
       if (state.questions.length > 0 && !this.progressBar) {
         const container = document.querySelector(".main__left");
         this.initializeProgressBar(container);
@@ -23,6 +19,9 @@ export class Quiz {
       const buttons = document.querySelectorAll(".button__group");
       switch (state.phase) {
         case "answering":
+          if (state.showError) {
+            this.addError();
+          }
           // Enable buttons before validation
           buttons.forEach((btn) => btn.disabled.false);
           this.displayQuestion();
@@ -140,13 +139,20 @@ export class Quiz {
 
   addError() {
     const errorField = document.querySelector(".main__right");
-    const errorSign = "/frontend/assets/images/icon-incorrect.svg";
+
     const div = document.createElement("div");
-    div.innerHTML = `
-        <img class="error-mark" src=${errorSign} />
-        <span class="error">Please select an answer</span>
-    `;
     div.classList.add("error__field");
+
+    const img = document.createElement("img");
+    img.className = "error-mark";
+    img.src = "/frontend/assets/images/icon-incorrect.svg";
+
+    const span = document.createElement("span");
+    span.className = "error";
+    span.textContent = "Please select an answer";
+
+    div.appendChild(img);
+    div.appendChild(span);
     errorField.appendChild(div);
 
     setTimeout(() => {
@@ -200,57 +206,98 @@ export class Quiz {
   displayQuestion() {
     const currentQuestion = this.stateManager.getCurrentQuestion();
     const currentState = this.stateManager.state;
+    const ANSWER_LETTERS = ["A", "B", "C", "D"];
 
     if (
       currentState.currentQuestionIndex <=
       currentState.questions.length - 1
     ) {
-      const letters = ["A", "B", "C", "D"];
+      // Create main containers
+      const mainLeft = document.createElement("div");
+      mainLeft.className = "main__left";
 
-      const title = document.querySelector(".main__heading");
+      const mainRight = document.createElement("div");
+      mainRight.className = "main__right";
+
+      // Create and set up question title
+      const title = document.createElement("h1");
+      title.className = "main__heading";
       title.textContent = currentQuestion.question;
       title.style.fontSize = "36px";
+      mainLeft.appendChild(title);
 
-      const buttonsContainer = document.querySelector(".buttons");
+      // Create buttons container
+      const buttonsContainer = document.createElement("div");
+      buttonsContainer.className = "buttons";
+      buttonsContainer.setAttribute("role", "group");
+      buttonsContainer.setAttribute("aria-label", "Quiz Questions");
 
-      const optionsArray = Array.isArray(currentQuestion.options)
-        ? currentQuestion.options
-        : [];
+      // Create answer list
+      const answersList = document.createElement("ul");
 
-      const html = `
-        <ul>
-            ${optionsArray
-              .map((option, index) => {
-                return `
-                    <li>
-                        <button class="button__group" data-answer="${index}">
-                            <div class="img-wrapper bold-big">
-                                ${letters[index]}
-                            </div>
-                            <span>${option
-                              .replace(/</g, "&lt;")
-                              .replace(/>/g, "&gt;")}</span>
-                        </button>
-                    </li>
-                `;
-              })
-              .join("")}
-        </ul>
-    `;
+      // Create answer buttons
+      currentQuestion.options.forEach((option, index) => {
+        const listItem = document.createElement("li");
 
-      buttonsContainer.innerHTML = html;
+        const button = document.createElement("button");
+        button.className = "button__group";
+        button.dataset.answer = index;
+
+        // Create letter wrapper
+        const letterWrapper = document.createElement("div");
+        letterWrapper.className = "img-wrapper bold-big";
+        letterWrapper.textContent = ANSWER_LETTERS[index];
+
+        // Create option text
+        const optionText = document.createElement("span");
+        optionText.textContent = option;
+
+        // Assemble button
+        button.appendChild(letterWrapper);
+        button.appendChild(optionText);
+        listItem.appendChild(button);
+        answersList.appendChild(listItem);
+      });
+
+      // Add answers to buttons container
+      buttonsContainer.appendChild(answersList);
+
+      // Add submit button
       const submitBtn = this.addSubmitButton();
       buttonsContainer.appendChild(submitBtn);
-      this.currentButton = submitBtn;
-      const questionInfoContainer = document.querySelector(".main__left");
-      questionInfoContainer.querySelector(".progress-display")?.remove();
-      questionInfoContainer.querySelector("p")?.remove();
-      this.addNumericalProgress(
-        questionInfoContainer,
-        currentState.currentQuestionIndex
-      );
+
+      // Add buttons to right section
+      mainRight.appendChild(buttonsContainer);
+
+      // Add progress bar to left section
+      this.initializeProgressBar(mainLeft);
+
+      // Add numerical progress to left section
+      this.addNumericalProgress(mainLeft, currentState.currentQuestionIndex);
+
+      // Create main content structure
+      const mainContent = document.querySelector(".main__content");
+      mainContent.innerHTML = ""; // Clear everything
+      mainContent.appendChild(mainLeft);
+      mainContent.appendChild(mainRight);
+
+      // Always create a new progress bar - let its own state management handle the progress
+      this.initializeProgressBar(mainLeft);
+      // Set up event listeners
       this.setupAnswerButtons();
     }
+  }
+
+  createHeadingElement() {
+    const heading = document.createElement("h1");
+    heading.classList.add("main__heading");
+    return heading;
+  }
+
+  createContainerElement(className) {
+    const container = document.createElement("div");
+    container.classList.add(className);
+    return container;
   }
 
   showResults() {
@@ -284,9 +331,19 @@ export class Quiz {
   }
 
   initializeProgressBar(container) {
-    this.progressBar = document.createElement("progress-bar");
-    this.progressBar.stateManager = this.stateManager;
-    container.appendChild(this.progressBar);
+    if (!this.progressBar) {
+      // First time - create and initialize
+      this.progressBar = document.createElement("progress-bar");
+      this.progressBar.stateManager = this.stateManager;
+      container.appendChild(this.progressBar);
+    } else {
+      // Progress bar exists - move it and update it
+      container.appendChild(this.progressBar);
+      this.progressBar.updateProgress(
+        this.stateManager.state.currentQuestionIndex + 1,
+        this.stateManager.state.questions.length
+      );
+    }
   }
 
   addCategoryDescription(category) {

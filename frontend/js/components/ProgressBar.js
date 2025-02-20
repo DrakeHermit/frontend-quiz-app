@@ -2,28 +2,11 @@ export default class ProgressBar extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.currentWidth = 0;
+    this.createBaseStructure(); // Create DOM once
   }
 
-  connectedCallback() {
-    this.render();
-  }
-
-  disconnectedCallback() {
-    if (this._stateManager && this.unsubscribe) {
-      this.unsubscribe();
-    }
-  }
-
-  set stateManager(manager) {
-    this._stateManager = manager;
-    this.initialize();
-  }
-
-  get stateManager() {
-    return this._stateManager;
-  }
-
-  render() {
+  createBaseStructure() {
     this.shadowRoot.innerHTML = `
       <style>
         .container {
@@ -41,8 +24,13 @@ export default class ProgressBar extends HTMLElement {
           height: 8px;
           background-color: var(--purple-color, #A729F5);
           border-radius: 4px;
-          transition: width 0.4s ease-in;
-          width: 10%; 
+          width: 0;
+          will-change: width;
+          transition: width 400ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-fill.can-transition {
+          transition: width 400ms ease;
         }
         
         @media(min-width: 640px) {
@@ -63,6 +51,31 @@ export default class ProgressBar extends HTMLElement {
     `;
   }
 
+  connectedCallback() {
+    // Add transition class after a brief delay
+    requestAnimationFrame(() => {
+      const fill = this.shadowRoot.querySelector(".progress-fill");
+      if (fill) {
+        fill.classList.add("can-transition");
+      }
+    });
+  }
+
+  disconnectedCallback() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
+
+  set stateManager(manager) {
+    this._stateManager = manager;
+    this.initialize();
+  }
+
+  get stateManager() {
+    return this._stateManager;
+  }
+
   initialize() {
     if (this._stateManager) {
       this.unsubscribe = this._stateManager.subscribe((newState) => {
@@ -80,7 +93,10 @@ export default class ProgressBar extends HTMLElement {
     const fill = this.shadowRoot.querySelector(".progress-fill");
     if (fill) {
       const progress = (current / total) * 100;
-      fill.style.width = `${progress}%`;
+      if (fill.style.width !== `${progress}%`) {
+        console.log(`Transitioning from ${fill.style.width} to ${progress}%`);
+        fill.style.width = `${progress}%`;
+      }
     }
   }
 }
