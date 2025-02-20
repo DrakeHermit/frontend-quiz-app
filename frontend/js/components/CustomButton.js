@@ -71,7 +71,7 @@ class CustomButton extends HTMLElement {
           this._stateManager.state.phase === "completed"
             ? "Play Again"
             : this._stateManager.state.buttonState === "submit"
-            ? "Submit answer"
+            ? "Submit Answer"
             : this._stateManager.state.buttonState === "finish"
             ? "Finish Quiz"
             : "Next question"

@@ -11,9 +11,11 @@ export class Quiz {
     this.currentButton;
 
     this.stateManager.subscribe((state) => {
-      if (state.questions.length > 0 && !this.progressBar) {
-        const container = document.querySelector(".main__left");
-        this.initializeProgressBar(container);
+      if (state.isLoading) {
+        console.log("Loading the spinner");
+        const container = document.querySelector(".main__content");
+        this.initializeLoadingState(container);
+        return; // Don't process anything else while loading
       }
 
       const buttons = document.querySelectorAll(".button__group");
@@ -21,7 +23,14 @@ export class Quiz {
         case "answering":
           if (state.showError) {
             this.addError();
+            return;
           }
+
+          if (state.questions.length > 0 && !this.progressBar) {
+            const container = document.querySelector(".main__left");
+            this.initializeProgressBar(container);
+          }
+
           // Enable buttons before validation
           buttons.forEach((btn) => btn.disabled.false);
           this.displayQuestion();
@@ -344,6 +353,21 @@ export class Quiz {
         this.stateManager.state.questions.length
       );
     }
+  }
+
+  initializeLoadingState(container) {
+    console.log("Container before clearing:", container.innerHTML);
+    container.innerHTML = "";
+    console.log("Container after clearing:", container.innerHTML);
+
+    console.log("Creating spinner");
+    this.loadingSpinner = document.createElement("loading-spinner");
+    this.loadingSpinner.stateManager = this.stateManager;
+    console.log("Spinner created:", this.loadingSpinner);
+
+    console.log("Trying to append spinner");
+    container.appendChild(this.loadingSpinner);
+    console.log("Container after append:", container.innerHTML);
   }
 
   addCategoryDescription(category) {

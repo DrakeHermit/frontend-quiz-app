@@ -34,14 +34,13 @@ class LoadingState extends HTMLElement {
       });
     }
   }
-
   render() {
     if (!this._stateManager) return;
 
     this.shadowRoot.innerHTML = `
         <style>
           .loader {
-            display: none;
+            display: flex;
             justify-content: center;
             align-items: center;
             width: 100%;

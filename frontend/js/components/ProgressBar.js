@@ -24,13 +24,9 @@ export default class ProgressBar extends HTMLElement {
           height: 8px;
           background-color: var(--purple-color, #A729F5);
           border-radius: 4px;
-          width: 0;
+          width: 10%;
           will-change: width;
           transition: width 400ms cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .progress-fill.can-transition {
-          transition: width 400ms ease;
         }
         
         @media(min-width: 640px) {
@@ -94,7 +90,6 @@ export default class ProgressBar extends HTMLElement {
     if (fill) {
       const progress = (current / total) * 100;
       if (fill.style.width !== `${progress}%`) {
-        console.log(`Transitioning from ${fill.style.width} to ${progress}%`);
         fill.style.width = `${progress}%`;
       }
     }
