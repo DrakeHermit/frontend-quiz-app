@@ -26,7 +26,6 @@ class LoadingState extends HTMLElement {
   initialize() {
     if (this._stateManager) {
       this.unsubscribe = this._stateManager.subscribe((state) => {
-        console.log("Loading state changed:", state.isLoading);
         const loader = this.shadowRoot.querySelector(".loader");
         if (loader) {
           loader.style.display = state.isLoading ? "flex" : "none";

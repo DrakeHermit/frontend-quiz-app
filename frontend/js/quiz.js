@@ -7,17 +7,10 @@ import LoadingState from "./components/LoadingState.js";
 export class Quiz {
   constructor(stateManager) {
     this.stateManager = stateManager;
-    this.progressBar = null;
     this.currentButton;
+    this.currentProgress = 0;
 
     this.stateManager.subscribe((state) => {
-      if (state.isLoading) {
-        console.log("Loading the spinner");
-        const container = document.querySelector(".main__content");
-        this.initializeLoadingState(container);
-        return; // Don't process anything else while loading
-      }
-
       const buttons = document.querySelectorAll(".button__group");
       switch (state.phase) {
         case "answering":
@@ -25,15 +18,15 @@ export class Quiz {
             this.addError();
             return;
           }
+          this.displayQuestion();
 
-          if (state.questions.length > 0 && !this.progressBar) {
-            const container = document.querySelector(".main__left");
-            this.initializeProgressBar(container);
-          }
+          this.updateProgress(
+            state.currentQuestionIndex + 1,
+            state.questions.length
+          );
 
           // Enable buttons before validation
           buttons.forEach((btn) => btn.disabled.false);
-          this.displayQuestion();
           break;
 
         case "answered":
@@ -56,7 +49,7 @@ export class Quiz {
           break;
 
         case "initial":
-          this.progressBar = null;
+          this.currentProgress = 0;
           this.displayUI();
       }
     });
@@ -278,9 +271,6 @@ export class Quiz {
       // Add buttons to right section
       mainRight.appendChild(buttonsContainer);
 
-      // Add progress bar to left section
-      this.initializeProgressBar(mainLeft);
-
       // Add numerical progress to left section
       this.addNumericalProgress(mainLeft, currentState.currentQuestionIndex);
 
@@ -290,7 +280,6 @@ export class Quiz {
       mainContent.appendChild(mainLeft);
       mainContent.appendChild(mainRight);
 
-      // Always create a new progress bar - let its own state management handle the progress
       this.initializeProgressBar(mainLeft);
       // Set up event listeners
       this.setupAnswerButtons();
@@ -340,18 +329,26 @@ export class Quiz {
   }
 
   initializeProgressBar(container) {
-    if (!this.progressBar) {
-      // First time - create and initialize
-      this.progressBar = document.createElement("progress-bar");
-      this.progressBar.stateManager = this.stateManager;
-      container.appendChild(this.progressBar);
-    } else {
-      // Progress bar exists - move it and update it
-      container.appendChild(this.progressBar);
-      this.progressBar.updateProgress(
-        this.stateManager.state.currentQuestionIndex + 1,
-        this.stateManager.state.questions.length
-      );
+    // Create progress bar
+    const progressBarContainer = document.createElement("div");
+    progressBarContainer.classList.add("container");
+    // Create progress fill
+    const progressFill = document.createElement("div");
+    progressFill.classList.add("progress-fill");
+
+    progressFill.style.width = `${this.currentProgress}%`;
+
+    progressBarContainer.appendChild(progressFill);
+    container.appendChild(progressBarContainer);
+  }
+
+  updateProgress(current, total) {
+    const fill = document.querySelector(".container .progress-fill");
+    if (fill) {
+      requestAnimationFrame(() => {
+        this.currentProgress = (current / total) * 100;
+        fill.style.width = `${this.currentProgress}%`;
+      });
     }
   }
 
