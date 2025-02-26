@@ -1,6 +1,6 @@
 export class QuizService {
   constructor() {
-    this.baseUrl = "http://localhost:3000/api/questions";
+    this.baseUrl = "http://localhost:5050/api/questions";
   }
   async fetchQuestions(category) {
     try {

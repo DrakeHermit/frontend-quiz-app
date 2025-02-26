@@ -1,7 +1,6 @@
 import { QuizService } from "./quiz-service.js";
 import { QuizStateManager } from "./QuizStateManager.js";
 import CustomButton from "./components/CustomButton.js";
-import ProgressBar from "./components/ProgressBar.js";
 import LoadingState from "./components/LoadingState.js";
 
 export class Quiz {

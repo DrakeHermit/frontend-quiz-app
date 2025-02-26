@@ -2,9 +2,11 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import Question from "./models/Question.js";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
+app.use(cors());
 
 // Connect to database
 connectDB();
@@ -20,29 +22,8 @@ app.get("/api/questions/:category", async (req, res) => {
 });
 
 app.get("/api/questions", async (req, res) => {
-  console.log("Route hit!");
   try {
-    console.log("Fetching all questions");
-
-    // Detailed model and collection logging
-    console.log(`Model Name: ${Question.modelName}`);
-    console.log(`Collection Name: ${Question.collection.collectionName}`);
-
-    // Use .lean() to get plain JavaScript objects
-    const questions = await Question.find().lean();
-
-    // Detailed logging of found questions
-    console.log("Total Questions Found:", questions.length);
-    console.log(
-      "Sample Questions:",
-      JSON.stringify(questions.slice(0, 2), null, 2)
-    );
-
-    if (questions.length === 0) {
-      console.log("No questions found in database");
-      return res.status(404).json({ message: "No questions found" });
-    }
-
+    const questions = await Question.find();
     res.json(questions);
   } catch (error) {
     console.error("Error fetching questions:", error);
