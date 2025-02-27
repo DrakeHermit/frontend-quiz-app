@@ -32,8 +32,6 @@ export class QuizStateManager {
 
   async handleCategorySelection(category) {
     try {
-      this.setState({ isLoading: true });
-
       const questions = await this.service.fetchQuestions(category);
 
       this.setState({
@@ -44,12 +42,14 @@ export class QuizStateManager {
         selectedAnswer: null,
         isLastQuestion: questions.length === 1,
         score: 0,
-        isLoading: false,
+        isLoading: true,
       });
     } catch (error) {
       console.log("An error has occurred while fetching the data: ", error);
       this.setState({ isLoading: false });
     }
+
+    this.setState({ isLoading: false });
   }
 
   handleButtonClick() {

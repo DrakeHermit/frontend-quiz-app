@@ -17,6 +17,14 @@ export class Quiz {
             this.addError();
             return;
           }
+
+          if (state.isLoading) {
+            console.log("Loading the spinner");
+            const container = document.querySelector(".main__content");
+            this.initializeLoadingState(container);
+            return; // Don't process anything else while loading
+          }
+
           this.displayQuestion();
 
           this.updateProgress(
