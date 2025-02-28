@@ -1,6 +1,6 @@
 export class QuizService {
   constructor() {
-    this.baseUrl = "http://localhost:5050/api/questions";
+    this.baseUrl = "https://frontend-quiz-app-8ir7.onrender.com";
   }
   async fetchQuestions(category) {
     try {

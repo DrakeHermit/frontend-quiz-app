@@ -11,18 +11,17 @@ export class Quiz {
 
     this.stateManager.subscribe((state) => {
       const buttons = document.querySelectorAll(".button__group");
+
       switch (state.phase) {
+        case "loading":
+          const container = document.querySelector(".main__content");
+          this.initializeLoadingState(container);
+          break;
+
         case "answering":
           if (state.showError) {
             this.addError();
             return;
-          }
-
-          if (state.isLoading) {
-            console.log("Loading the spinner");
-            const container = document.querySelector(".main__content");
-            this.initializeLoadingState(container);
-            return; // Don't process anything else while loading
           }
 
           this.displayQuestion();
@@ -57,6 +56,11 @@ export class Quiz {
 
         case "initial":
           this.currentProgress = 0;
+
+          const categoryDescription = document.querySelector(".description");
+          categoryDescription.style.opacity = "0";
+          categoryDescription.style.visibility = "hidden";
+
           this.displayUI();
       }
     });
@@ -283,26 +287,13 @@ export class Quiz {
 
       // Create main content structure
       const mainContent = document.querySelector(".main__content");
-      mainContent.innerHTML = ""; // Clear everything
+      mainContent.innerHTML = "";
       mainContent.appendChild(mainLeft);
       mainContent.appendChild(mainRight);
 
       this.initializeProgressBar(mainLeft);
-      // Set up event listeners
       this.setupAnswerButtons();
     }
-  }
-
-  createHeadingElement() {
-    const heading = document.createElement("h1");
-    heading.classList.add("main__heading");
-    return heading;
-  }
-
-  createContainerElement(className) {
-    const container = document.createElement("div");
-    container.classList.add(className);
-    return container;
   }
 
   showResults() {
@@ -360,18 +351,12 @@ export class Quiz {
   }
 
   initializeLoadingState(container) {
-    console.log("Container before clearing:", container.innerHTML);
     container.innerHTML = "";
-    console.log("Container after clearing:", container.innerHTML);
 
-    console.log("Creating spinner");
     this.loadingSpinner = document.createElement("loading-spinner");
     this.loadingSpinner.stateManager = this.stateManager;
-    console.log("Spinner created:", this.loadingSpinner);
 
-    console.log("Trying to append spinner");
     container.appendChild(this.loadingSpinner);
-    console.log("Container after append:", container.innerHTML);
   }
 
   addCategoryDescription(category) {
