@@ -275,6 +275,8 @@ body.main-light .progress-display {
     color: #fff;
     font-size: 18px;
     font-weight: 500;
+    word-wrap: break-word;
+    text-align: left;
   }
 }
 
@@ -286,11 +288,16 @@ body.main-light .progress-display {
     justify-content: center; 
     align-items: center;
     border-radius: 12px;
+    flex-shrink: 0;
 
     img {
-      width: 28px;
-      height: 28px;
+      width: 36px;
+      height: 36px;
     }
+  }
+
+  .category-description h2 {
+    font-size: 2.2rem;
   }
 
   .description {
@@ -439,9 +446,13 @@ body.main-light .progress-display {
     border-radius: 12px;
 
     img {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
     }
+  }
+
+  .category-description h2 {
+    font-size: 2.2rem;
   }
 }
 
@@ -494,7 +505,7 @@ body.main-light .progress-display {
 }
 
 .button__group {
-  width: 600px;
+  width: 650px;
   padding: 15px;
 }
 
