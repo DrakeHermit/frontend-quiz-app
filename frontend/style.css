@@ -45,7 +45,7 @@ img {
 }
 
 .wrapper {
-  width: 80%;
+  width: 88%;
   margin: 0 auto;
 }
 
@@ -62,6 +62,11 @@ img {
   border: 1px solid white;
   border-radius: 8px;
   height: 22px;
+}
+
+.button__group span {
+  font-size: 1rem !important;
+  font-weight: 100 !important;
 }
 
 .validate {
@@ -281,8 +286,8 @@ body.main-light .progress-display {
 }
 
 .img-wrapper {
-    width: 56px;
-    height: 56px;
+    width: 46px;
+    height: 46px;
     background-color: var(--background-color-light);
     display: flex;
     justify-content: center; 
@@ -296,14 +301,7 @@ body.main-light .progress-display {
     }
   }
 
-  .category-description h2 {
-    font-size: 2.2rem;
-  }
-
   .description {
-    color: #fff;
-    font-size: 28px;
-    font-weight: 700;
     opacity: 0;
     visibility: hidden;
     transition: all 0.5s ease-in;
@@ -312,7 +310,13 @@ body.main-light .progress-display {
   .category-description {
     display: flex;
     align-items: center;
-    gap: 1.2rem;
+    gap: .8rem;
+
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 500;
+      color: #fff;
+    }
   }
 
 /* Utility */
@@ -452,7 +456,7 @@ body.main-light .progress-display {
   }
 
   .category-description h2 {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
 }
 

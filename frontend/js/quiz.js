@@ -236,7 +236,7 @@ export class Quiz {
       const title = document.createElement("h1");
       title.className = "main__heading";
       title.textContent = currentQuestion.question;
-      title.style.fontSize = "36px";
+      title.style.fontSize = "26px";
       mainLeft.appendChild(title);
 
       // Create buttons container
