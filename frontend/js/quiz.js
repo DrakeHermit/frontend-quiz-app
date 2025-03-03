@@ -88,25 +88,25 @@ export class Quiz {
               <ul>
                 <li>
                   <button class="button__group" data-category="html">
-                    <div class="img-wrapper orange"><img src="/frontend/assets/images/icon-html.svg" alt=""></div>
+                    <div class="img-wrapper orange"><img src="./assets/images/icon-html.svg" alt=""></div>
                     <span>HTML</span>
                   </button>
                 </li>
                 <li>
                   <button class="button__group" data-category="css">
-                    <div class="img-wrapper green"><img src="/frontend/assets/images/icon-css.svg" alt=""></div>
+                    <div class="img-wrapper green"><img src="./assets/images/icon-css.svg" alt=""></div>
                     <span>CSS</span>
                   </button>
                 </li>
                 <li>
                   <button class="button__group" data-category="javascript">
-                    <div class="img-wrapper blue"><img src="/frontend/assets/images/icon-javascript.svg" alt=""></div>
+                    <div class="img-wrapper blue"><img src="./assets/images/icon-javascript.svg" alt=""></div>
                     <span>Javascript</span>
                   </button>
                 </li>
                 <li>
                   <button class="button__group" data-category="accessibility">
-                    <div class="img-wrapper purple"><img src="/frontend/assets/images/icon-accessibility.svg" alt=""></div>
+                    <div class="img-wrapper purple"><img src="./assets/images/icon-accessibility.svg" alt=""></div>
                     <span>Accessibility</span>
                   </button>
                 </li>
@@ -158,7 +158,7 @@ export class Quiz {
 
     const img = document.createElement("img");
     img.className = "error-mark";
-    img.src = "/frontend/assets/images/icon-incorrect.svg";
+    img.src = "./assets/images/icon-incorrect.svg";
 
     const span = document.createElement("span");
     span.className = "error";
@@ -174,8 +174,8 @@ export class Quiz {
   }
 
   showAnswer(answer, selectedBtn) {
-    const correctAnswer = "/frontend/assets/images/icon-correct.svg";
-    const incorrectAnswer = "/frontend/assets/images/icon-incorrect.svg";
+    const correctAnswer = "./assets/images/icon-correct.svg";
+    const incorrectAnswer = "./assets/images/icon-incorrect.svg";
 
     if (answer) {
       const div = document.createElement("div");
@@ -199,7 +199,7 @@ export class Quiz {
   }
 
   showCorrectAnswer(correctBtn) {
-    const correctAnswer = "/frontend/assets/images/icon-correct.svg";
+    const correctAnswer = "./assets/images/icon-correct.svg";
     const div = document.createElement("div");
     div.innerHTML = `<img src=${correctAnswer}></img>`;
     div.classList.add("validate");
@@ -376,7 +376,7 @@ export class Quiz {
 
     const categoryObj = {
       title: title,
-      pictureSrc: `/frontend/assets/images/icon-${category}.svg`,
+      pictureSrc: `./assets/images/icon-${category}.svg`,
       bgColor: categoryStyles[category],
     };
 
