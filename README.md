@@ -42,8 +42,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://github.com/DrakeHermit/frontend-quiz-app/tree/main)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: [GitHub](https://github.com/DrakeHermit/frontend-quiz-app)
+- Live Site URL: [Live Site](https://drakehermit-frontend-quiz.netlify.app/)
 
 ## My process
 
